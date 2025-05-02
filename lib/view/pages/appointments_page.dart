@@ -1,3 +1,4 @@
+import 'package:barber_app/view/widgets/appointment_tile_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class AppointmentsPage extends StatelessWidget {
           children: [
             Icon(Icons.calendar_month, color: Colors.amber,size: 40,),
             Divider(),
-
+            Column(children: List.generate(2, (index) => AppointmentTile(id:index),))
           ],
         ),
       ),

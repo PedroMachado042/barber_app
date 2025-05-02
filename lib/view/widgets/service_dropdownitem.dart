@@ -37,7 +37,7 @@ class ServiceDropdownitem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 40),
-                  Icon(Icons.timer, size: 18),
+                  Icon(Icons.access_time, size: 18),
                   SizedBox(width: 5,),
                   Text(
                     time,

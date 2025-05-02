@@ -10,6 +10,10 @@ class DummyData {
     [Icons.content_cut_sharp, 'Corte Navalhado', '30,00', '45:00'],
     [Icons.content_cut_sharp, 'Desenho', '3,00', '10:00'],
   ];
+  static List a = [
+    [Icons.content_cut_sharp, 'Corte', '13:00 -> 13:45', '07/05/25', false],
+    [Icons.content_cut_sharp, 'Barba', '15:00 -> 15:30', '26/04/25', true],
+  ];
 }
 
 void loadServices() {

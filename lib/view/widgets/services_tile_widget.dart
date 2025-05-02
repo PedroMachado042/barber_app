@@ -45,7 +45,7 @@ class ServicesTile extends StatelessWidget {
                       SizedBox(height: 5),
                       Row(
                         children: [
-                          Icon(Icons.timer, size: 16),
+                          Icon(Icons.access_time, size: 16),
                           Text(
                             ' ${DummyData.s[id][3]}',
                             style: TextStyle(fontSize: 12),

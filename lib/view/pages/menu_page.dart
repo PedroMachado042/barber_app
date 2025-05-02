@@ -70,8 +70,8 @@ class MenuPage extends StatelessWidget {
                       id: 2,
                     ),
                     MenuButton(
-                      text: 'Profissionais',
-                      icon: Icons.people_rounded,
+                      text: 'Sobre Nós',
+                      icon: Icons.location_on_sharp,
                       id: 3,
                     ),
                   ],
