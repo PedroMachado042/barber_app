@@ -20,7 +20,7 @@ class ServicesPage extends StatelessWidget {
           children: [
             Icon(Icons.content_cut_sharp, color: Colors.amber,size: 40,),
             Divider(),
-            ServicesTile(),ServicesTile(),ServicesTile(),ServicesTile(),ServicesTile(),ServicesTile()
+            Column(spacing: 5, children: List.generate(6, (index) => ServicesTile(id:index),),),
           ],
         ),
       ),

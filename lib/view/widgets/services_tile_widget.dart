@@ -1,7 +1,9 @@
+import 'package:barber_app/data/dummy_data.dart';
 import 'package:flutter/material.dart';
 
 class ServicesTile extends StatelessWidget {
-  const ServicesTile({super.key});
+  const ServicesTile({super.key, required this.id});
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +25,35 @@ class ServicesTile extends StatelessWidget {
               children: [
                 Icon(Icons.content_cut_sharp, size: 45),
                 SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Corte ............R\$ 25,00',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'Um corte de cabelo no grau',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DummyData.s[id][1],
+                            style: TextStyle(fontSize: 19),
+                          ),
+                          Text(
+                            'R\$${DummyData.s[id][2]}',
+                            style: TextStyle(fontSize: 19),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Icon(Icons.timer, size: 16),
+                          Text(
+                            ' ${DummyData.s[id][3]}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

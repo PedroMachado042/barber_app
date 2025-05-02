@@ -1,3 +1,4 @@
+import 'package:barber_app/view/widgets/booking_confirm_widget.dart';
 import 'package:barber_app/view/widgets/service_dropdownitem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -213,7 +214,7 @@ class _BookingPageState extends State<BookingPage> {
                               });
                               print(index);
                             },
-                            child: Container( 
+                            child: Container(
                               color:
                                   selectedHour != index
                                       ? Colors.black87
@@ -246,9 +247,16 @@ class _BookingPageState extends State<BookingPage> {
                       5,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return BookingConfirmWidget();
+                      },
+                    );
+                  },
                   child: Text(
-                    'Confirmar Agendamento!',
+                    'Confirmar Agendamento',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 22,

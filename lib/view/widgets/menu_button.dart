@@ -1,8 +1,9 @@
+import 'package:barber_app/view/pages/appointments_page.dart';
 import 'package:barber_app/view/pages/booking_page.dart';
 import 'package:barber_app/view/pages/services_page.dart';
 import 'package:flutter/material.dart';
 
-List<Widget> pages = [BookingPage(), ServicesPage(), ServicesPage(), ServicesPage()];
+List<Widget> pages = [BookingPage(), AppointmentsPage(), ServicesPage(), ServicesPage()];
 
 class MenuButton extends StatelessWidget {
   const MenuButton({
