@@ -1,10 +1,29 @@
-import 'package:barber_app/data/dummy_data.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
-class AppointmentTile extends StatelessWidget {
-  const AppointmentTile({super.key, required this.id});
+class AppointmentsTile extends StatefulWidget {
+  const AppointmentsTile({super.key, required this.id});
   final int id;
+
   @override
+  State<AppointmentsTile> createState() => _AppointmentsTileState();
+}
+
+class _AppointmentsTileState extends State<AppointmentsTile> {
+  final bookingsBox = Hive.box('bookingsBox');
+  @override
+  void initState() {
+    super.initState();
+    if (bookingsBox.get(widget.id)[2].isBefore(DateTime.now())) {
+      bookingsBox.put(widget.id, [
+        bookingsBox.get(widget.id)[0],
+        bookingsBox.get(widget.id)[1],
+        bookingsBox.get(widget.id)[2],
+        true
+      ]);
+    }
+  }
+
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -23,7 +42,13 @@ class AppointmentTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(DummyData.a[id][0], size: 45),
+                Icon(
+                  IconData(
+                    bookingsBox.get(widget.id)[0],
+                    fontFamily: 'MaterialIcons',
+                  ),
+                  size: 45,
+                ),
                 SizedBox(width: 15),
                 Expanded(
                   child: Column(
@@ -33,7 +58,7 @@ class AppointmentTile extends StatelessWidget {
                             MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DummyData.a[id][1],
+                            bookingsBox.get(widget.id)[1],
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -43,32 +68,19 @@ class AppointmentTile extends StatelessWidget {
                             MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DummyData.a[id][2],
+                            '${(bookingsBox.get(widget.id)[2].hour).toString().padLeft(2, '0')}:${(bookingsBox.get(widget.id)[2].minute).toString().padLeft(2, '0')}',
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
-                            DummyData.a[id][3],
+                            '${bookingsBox.get(widget.id)[2].day}/${bookingsBox.get(widget.id)[2].month}/${bookingsBox.get(widget.id)[2].year}',
                             style: TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
                       Row(
                         children:
-                            DummyData.a[id][4]
+                            bookingsBox.get(widget.id)[3]
                                 ? [
-                                  Icon(
-                                    Icons.alarm,
-                                    size: 16,
-                                    color: Colors.yellow,
-                                  ),
-                                  Text(
-                                    ' Agendado',
-                                    style: TextStyle(
-                                      color: Colors.yellow,
-                                    ),
-                                  ),
-                                ]
-                                : [
                                   Icon(
                                     Icons.alarm,
                                     size: 16,
@@ -78,6 +90,19 @@ class AppointmentTile extends StatelessWidget {
                                     ' Concluido',
                                     style: TextStyle(
                                       color: Colors.green,
+                                    ),
+                                  ),
+                                ]
+                                : [
+                                  Icon(
+                                    Icons.alarm,
+                                    size: 16,
+                                    color: Colors.yellow,
+                                  ),
+                                  Text(
+                                    ' Agendado',
+                                    style: TextStyle(
+                                      color: Colors.yellow,
                                     ),
                                   ),
                                 ],

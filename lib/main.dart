@@ -1,3 +1,5 @@
+import 'package:barber_app/data/dummy_data.dart';
+import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,13 @@ void main() async {
   // initialize hive;
   await Hive.initFlutter();
   // ignore: unused_local_variable
+  var servicesBox = await Hive.openBox('servicesBox');
+  // ignore: unused_local_variable
   var bookingsBox = await Hive.openBox('bookingsBox');
+  // ignore: unused_local_variable
+  var horariosBox = await Hive.openBox('horariosBox');
+  servicesLenght.value = servicesBox.length;
+  loadServices();
   runApp(MyApp());
 }
 

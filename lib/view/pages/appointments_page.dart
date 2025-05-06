@@ -1,12 +1,16 @@
+import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/widgets/appointment_tile_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class AppointmentsPage extends StatelessWidget {
   const AppointmentsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final bookingsBox = Hive.box('bookingsBox');
+    bookingsLenght.value = bookingsBox.length;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -18,9 +22,19 @@ class AppointmentsPage extends StatelessWidget {
         child: Column(
           spacing: 5,
           children: [
-            Icon(Icons.calendar_month, color: Colors.amber,size: 40,),
+            Icon(Icons.calendar_month, color: Colors.amber, size: 40),
             Divider(),
-            Column(children: List.generate(2, (index) => AppointmentTile(id:index),))
+            ValueListenableBuilder<int>(
+              valueListenable: bookingsLenght,
+              builder: (context, value, child) {
+                return Column(
+                  children: List.generate(
+                    value,
+                    (index) => AppointmentsTile(id: index),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

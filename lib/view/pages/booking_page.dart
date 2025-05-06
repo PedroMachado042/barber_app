@@ -1,7 +1,10 @@
+import 'package:barber_app/data/dummy_data.dart';
+import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/widgets/booking_confirm_widget.dart';
 import 'package:barber_app/view/widgets/service_dropdownitem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
@@ -18,7 +21,12 @@ class _BookingPageState extends State<BookingPage> {
   bool hasDay = false;
   bool hasHour = false;
 
+  final servicesBox = Hive.box('servicesBox');
   @override
+  void initState() {
+    super.initState;
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -61,13 +69,13 @@ class _BookingPageState extends State<BookingPage> {
                     15,
                   ),
                   style: TextStyle(color: Colors.white, fontSize: 20),
-                  items: const [
+                  items: [
                     //                                  / /ISSO É UM ITEM
                     DropdownMenuItem(
                       value: 0,
                       child: ServiceDropdownitem(
                         name: 'Corte',
-                        icon: Icons.content_cut_sharp,
+                        icon: servicesBox.get(0)[0],
                         price: 'R\$ 25,00',
                         time: '45 min',
                       ),
@@ -76,7 +84,7 @@ class _BookingPageState extends State<BookingPage> {
                       value: 1,
                       child: ServiceDropdownitem(
                         name: 'Barba',
-                        icon: Icons.face,
+                        icon: servicesBox.get(1)[0],
                         price: 'R\$ 15,00',
                         time: '30 min',
                       ),
@@ -85,7 +93,7 @@ class _BookingPageState extends State<BookingPage> {
                       value: 2,
                       child: ServiceDropdownitem(
                         name: 'Sobrancelha',
-                        icon: Icons.face,
+                        icon: servicesBox.get(2)[0],
                         price: 'R\$ 8,00',
                         time: '20 min',
                       ),
@@ -94,7 +102,7 @@ class _BookingPageState extends State<BookingPage> {
                       value: 3,
                       child: ServiceDropdownitem(
                         name: 'Pézinho',
-                        icon: Icons.face,
+                        icon: servicesBox.get(3)[0],
                         price: 'R\$ 5,00',
                         time: '10 min',
                       ),
@@ -103,7 +111,7 @@ class _BookingPageState extends State<BookingPage> {
                       value: 4,
                       child: ServiceDropdownitem(
                         name: 'Corte Navalhado',
-                        icon: Icons.face,
+                        icon: servicesBox.get(4)[0],
                         price: 'R\$ 30,00',
                         time: '45 min',
                       ),
@@ -112,7 +120,7 @@ class _BookingPageState extends State<BookingPage> {
                       value: 5,
                       child: ServiceDropdownitem(
                         name: 'Desenho',
-                        icon: Icons.face,
+                        icon: servicesBox.get(5)[0],
                         price: 'R\$ 3,00',
                         time: '10 min',
                       ),
@@ -122,7 +130,14 @@ class _BookingPageState extends State<BookingPage> {
                     setState(() {
                       selectedService = value;
                       hasService = true;
+                      selectedDay = null;
+                      selectedHour = null;
+                      hasDay = false;
+                      hasHour = false;
+                      horariosLenght.value = horariosBox.length;
                     });
+                    horariosLenght.value = horariosBox.length;
+                    horariosBox.clear(); //pra atualizar sempre
                   },
                 ),
               ),
@@ -136,7 +151,7 @@ class _BookingPageState extends State<BookingPage> {
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: 8,
+                      itemCount: 7,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8),
@@ -145,8 +160,19 @@ class _BookingPageState extends State<BookingPage> {
                               setState(() {
                                 hasDay = true;
                                 selectedDay = index;
+                                selectedHour = null;
+                                hasHour = false;
                               });
-                              print('aa');
+                              if (index == 1) {
+                                loadHorarios2();
+                              } else {
+                                loadHorarios();
+                              }
+                              print(
+                                DateTime.now().add(
+                                  Duration(days: index),
+                                ),
+                              );
                             },
                             child: Container(
                               width: 80,
@@ -160,15 +186,15 @@ class _BookingPageState extends State<BookingPage> {
                                       MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Abril',
+                                      '${DummyData.months[DateTime.now().add(Duration(days: index)).month - 1]}',
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     Text(
-                                      '${index + 1}',
+                                      '${DateTime.now().add(Duration(days: index)).day}',
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     Text(
-                                      'seg',
+                                      '${DummyData.weekdays[DateTime.now().add(Duration(days: index)).weekday - 1]}',
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ],
@@ -189,46 +215,48 @@ class _BookingPageState extends State<BookingPage> {
                   child: Container(
                     color: Colors.black26,
                     height: 250,
-                    child: GridView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 24,
-                      gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
-                            mainAxisExtent: 50,
-                          ),
-                      itemBuilder: (context, index) {
-                        double time = index / 2 + 8.5;
-                        int timer = time.toInt();
-                        bool hasDecimalPlaces(double time) {
-                          return time % 1 != 0;
-                        }
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: horariosLenght,
+                      builder: (context, value, child) {
+                        return GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: value,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 5,
+                                mainAxisExtent: 50,
+                              ),
+                          itemBuilder: (context, index) {
+                            /*double time = index / 2 + 8.5;
+                            int timer = time.toInt();
+                            bool hasDecimalPlaces(double time) {
+                              return time % 1 != 0;
+                            }*/
 
-                        return Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                hasHour = true;
-                                selectedHour = index;
-                              });
-                              print(index);
-                            },
-                            child: Container(
-                              color:
-                                  selectedHour != index
-                                      ? Colors.black87
-                                      : Colors.white10,
-                              child: Center(
-                                child: Text(
-                                  hasDecimalPlaces(time)
-                                      ? '$timer:30'
-                                      : '$timer:00',
-                                  style: TextStyle(fontSize: 16),
+                            return Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    hasHour = true;
+                                    selectedHour = index;
+                                  });
+                                },
+                                child: Container(
+                                  color:
+                                      selectedHour != index
+                                          ? Colors.black87
+                                          : Colors.white10,
+                                  child: Center(
+                                    child: Text(
+                                      '${horariosBox.get(index)}',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         );
                       },
                     ),
@@ -248,10 +276,18 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                   ),
                   onPressed: () {
+                    print(selectedDay);
+                    print(selectedHour);
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return BookingConfirmWidget();
+                        return BookingConfirmWidget(
+                          time: DateTime.now().add(
+                            Duration(days: selectedDay!),
+                          ),
+                          hour: selectedHour!,
+                          service: selectedService,
+                        );
                       },
                     );
                   },

@@ -23,7 +23,7 @@ class ServicesTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.content_cut_sharp, size: 45),
+                Icon(IconData(servicesBox.get(id)[0], fontFamily: 'MaterialIcons'), size: 45),
                 SizedBox(width: 15),
                 Expanded(
                   child: Column(
@@ -33,11 +33,11 @@ class ServicesTile extends StatelessWidget {
                             MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            DummyData.s[id][1],
+                            servicesBox.get(id)[1],
                             style: TextStyle(fontSize: 19),
                           ),
                           Text(
-                            'R\$${DummyData.s[id][2]}',
+                            'R\$${servicesBox.get(id)[2]}',
                             style: TextStyle(fontSize: 19),
                           ),
                         ],
@@ -47,7 +47,7 @@ class ServicesTile extends StatelessWidget {
                         children: [
                           Icon(Icons.access_time, size: 16),
                           Text(
-                            ' ${DummyData.s[id][3]}',
+                            ' ${servicesBox.get(id)[3]}',
                             style: TextStyle(fontSize: 12),
                           ),
                         ],
