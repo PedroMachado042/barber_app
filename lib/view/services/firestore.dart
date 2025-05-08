@@ -1,12 +1,148 @@
+import 'package:barber_app/data/dummy_data.dart';
+import 'package:barber_app/data/notifiers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive/hive.dart';
 
 class FirestoreService {
+  final User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final bookingsBox = Hive.box('bookingsBox');
 
-  Future<void> addNumber(String i) {
-    return firestore.collection('Numbers').doc('numbers').set({
-      'value': i,
-      'timestamp': Timestamp.now(),
-    });
+  Future<void> loadServices() async {
+    int i = 0;
+    servicesBox.clear();
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('Services').get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      servicesBox.put(i, [
+        doc['icon'],
+        doc['name'],
+        doc['value'],
+        doc['time'],
+      ]);
+      i += 1;
+    }
+  }
+
+  Future<void> loadHorarios(String prof, String date) async {
+    int i = 0;
+    horariosBox.clear();
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(prof)
+            .collection('horarios')
+            .doc('horariosLivres')
+            .get();
+    final data = snapshot.data() as Map<String, dynamic>?;
+    //print(data!.length);
+    //print(data[date]);
+    //print(horariosBox.values);
+    if (data![date] == null) {
+      await createHorarios(prof, date);
+      return;
+    }
+    for (String s in data[date]) {
+      horariosBox.put(i, s);
+      i += 1;
+    }
+    horariosLenght.value = horariosBox.length;
+  }
+
+  Future<void> createHorarios(String prof, String date) async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(prof)
+            .collection('horarios')
+            .doc('horariosTotal')
+            .get();
+    await FirebaseFirestore.instance
+        .collection('Professionals')
+        .doc(prof)
+        .collection('horarios')
+        .doc('horariosLivres')
+        .set({date: snapshot.get('total')}, SetOptions(merge: true));
+    await FirestoreService().loadHorarios(prof, date);
+  }
+
+  Future<void> reservarHorario(
+    String prof,
+    String date,
+    String time,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection('Professionals')
+        .doc(prof)
+        .collection('horarios')
+        .doc('horariosLivres')
+        .update({
+          date: FieldValue.arrayRemove([time]),
+        });
+  }
+
+  Future<void> changeHorarios(String prof, List newHorarios) async {
+    return firestore
+        .collection('Professionals')
+        .doc(prof)
+        .collection('horarios')
+        .doc('horariosTotal')
+        .set({'total': newHorarios});
+  }
+
+  Future<void> setAppointments(
+    int icon,
+    String name,
+    String time,
+  ) async {
+    return firestore
+        .collection('Clients')
+        .doc(user!.email!)
+        .collection('agendamentos')
+        .doc('agendamento${bookingsBox.length - 1}')
+        .set({
+          'icon': icon,
+          'name': name,
+          'time': time,
+          'timestamp': Timestamp.now(),
+        });
+  }
+
+  Future<void> getAppointments() async {
+    int i = 0;
+    bookingsBox.clear();
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Clients')
+            .doc(user!.email!)
+            .collection('agendamentos')
+            .get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      bookingsBox.put(i, [
+        doc['icon'],
+        doc['name'],
+        DateTime.parse(doc['time']),
+        false,
+      ]);
+      i += 1;
+    }
+    bookingsLenght.value = i;
+    print(bookingsLenght.value);
+    print('AIUFBWAIUGBIUAWUBGIUAWBGIUGWBAIGBWAGU');
+    print(bookingsBox.toMap());
+  }
+
+  Future<void> deleteCollection() async {
+    /*
+    final collection = FirebaseFirestore.instance.collection(
+      user!.email!,
+    );
+
+    final snapshot = await collection.get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+  */
   }
 }

@@ -50,7 +50,7 @@ class DummyData {
   ];
 }
 
-void loadServices() async {
+void loadServicess() async {
   await servicesBox.clear();
   List s = [
     [Icons.content_cut_sharp.codePoint, 'Corte', '25,00', '45:00'],
@@ -106,7 +106,6 @@ void loadHorarios() async {
     );
   }
   horariosLenght.value = horariosBox.length;
-  print(horariosBox.toMap());
 }
 
 void loadHorarios2() async {
@@ -129,5 +128,4 @@ void loadHorarios2() async {
     );
   }
   horariosLenght.value = horariosBox.length;
-  print(horariosBox.toMap());
 }

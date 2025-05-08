@@ -19,7 +19,7 @@ class _AppointmentsTileState extends State<AppointmentsTile> {
         bookingsBox.get(widget.id)[0],
         bookingsBox.get(widget.id)[1],
         bookingsBox.get(widget.id)[2],
-        true
+        true,
       ]);
     }
   }

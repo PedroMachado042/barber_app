@@ -1,3 +1,4 @@
+import 'package:barber_app/view/pages/drawer/drawer_page.dart';
 import 'package:barber_app/view/widgets/menu_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ class MenuPage extends StatelessWidget {
         centerTitle: true,
         title: Text('Menu'),
         backgroundColor: CupertinoColors.placeholderText,
+      ),
+      drawer: Drawer(
+        child: DrawerPage(),
       ),
       body: Column(
         children: [

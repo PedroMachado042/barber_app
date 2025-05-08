@@ -1,4 +1,5 @@
-import 'package:barber_app/view/pages/menu_page.dart';
+import 'package:barber_app/view/pages/login_page.dart';
+import 'package:barber_app/view/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class LaunchPage extends StatelessWidget {
@@ -17,13 +18,15 @@ class LaunchPage extends StatelessWidget {
             spacing: 20,
             children: [
               ElevatedButton(
-                onPressed: () {Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => MenuPage(),
-                  ),
-                );},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => LoginPage(isRegistring: false),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size.fromHeight(55),
                   backgroundColor: const Color.fromARGB(
@@ -39,7 +42,15 @@ class LaunchPage extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => LoginPage(isRegistring: true),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size.fromHeight(55),
                   backgroundColor: Colors.black54,
@@ -51,7 +62,9 @@ class LaunchPage extends StatelessWidget {
               ),
               Divider(color: Colors.black87, thickness: 3),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  AuthService().signInWithGoogle(context);
+                },
                 icon: Image.asset(
                   'assets/images/google_logo.png',
                   height: 25,

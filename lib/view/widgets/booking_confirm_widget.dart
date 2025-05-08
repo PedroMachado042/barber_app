@@ -1,4 +1,5 @@
 import 'package:barber_app/data/dummy_data.dart';
+import 'package:barber_app/view/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -16,6 +17,19 @@ class BookingConfirmWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bookingsBox = Hive.box('bookingsBox');
+    final servicesBox = Hive.box('servicesBox');
+
+    //Calcular a soma das horas
+    int tempoDuracao = int.parse(
+      (servicesBox.get(service!)[3]).split(":")[0],
+    );
+    List<String> horaInicial = horariosBox.get(hour).split(":");
+    int minutosTotais =
+        int.parse(horaInicial[0]) * 60 +
+        int.parse(horaInicial[1]) +
+        tempoDuracao;
+    String endTime = '${minutosTotais ~/ 60}:${minutosTotais % 60}';
+
     return AlertDialog(
       //shape: BeveledRectangleBorder(),
       content: Container(
@@ -71,7 +85,7 @@ class BookingConfirmWidget extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    '${horariosBox.get(hour)} -> 19:45',
+                    '${horariosBox.get(hour)} -> ${endTime}',
                     style: TextStyle(fontSize: 22),
                   ),
                 ),
@@ -112,7 +126,7 @@ class BookingConfirmWidget extends StatelessWidget {
                   5,
                 ),
               ),
-              onPressed: () {
+              onPressed: () async{
                 Navigator.pop(context);
                 Navigator.pop(context);
                 List<String> parts = horariosBox.get(hour).split(':');
@@ -126,7 +140,6 @@ class BookingConfirmWidget extends StatelessWidget {
                   0,
                   0,
                 );
-
                 bookingsBox.put(bookingsBox.length, [
                   servicesBox.get(service)[0],
                   servicesBox.get(service)[1],
@@ -134,7 +147,16 @@ class BookingConfirmWidget extends StatelessWidget {
                   false,
                 ]);
                 print(bookingsBox.toMap());
-
+                await FirestoreService().reservarHorario(
+                  'rose@gmail.com',
+                  '${time.day.toString().padLeft(2, '0')}-${time.month.toString().padLeft(2, '0')}',
+                  horariosBox.get(hour),
+                );
+                await FirestoreService().setAppointments(
+                  servicesBox.get(service)[0],
+                  servicesBox.get(service)[1],
+                  '$preparedTime'
+                );
                 /*
                 showDialog(
                   context: context,

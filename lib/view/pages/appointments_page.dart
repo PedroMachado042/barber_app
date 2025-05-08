@@ -19,23 +19,28 @@ class AppointmentsPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(30),
-        child: Column(
-          spacing: 5,
-          children: [
-            Icon(Icons.calendar_month, color: Colors.amber, size: 40),
-            Divider(),
-            ValueListenableBuilder<int>(
-              valueListenable: bookingsLenght,
-              builder: (context, value, child) {
-                return Column(
-                  children: List.generate(
-                    value,
-                    (index) => AppointmentsTile(id: index),
-                  ),
-                );
-              },
+        child: SizedBox(
+          height: 600,
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 5,
+              children: [
+                Icon(Icons.calendar_month, color: Colors.amber, size: 40),
+                Divider(),
+                ValueListenableBuilder<int>(
+                  valueListenable: bookingsLenght,
+                  builder: (context, value, child) {
+                    return Column(
+                      children: List.generate(
+                        value,
+                        (index) => AppointmentsTile(id: (bookingsLenght.value-1)-index),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

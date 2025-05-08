@@ -1,5 +1,6 @@
 import 'package:barber_app/data/dummy_data.dart';
 import 'package:barber_app/data/notifiers.dart';
+import 'package:barber_app/view/services/firestore.dart';
 import 'package:barber_app/view/widgets/booking_confirm_widget.dart';
 import 'package:barber_app/view/widgets/service_dropdownitem.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,55 +75,55 @@ class _BookingPageState extends State<BookingPage> {
                     DropdownMenuItem(
                       value: 0,
                       child: ServiceDropdownitem(
-                        name: 'Corte',
+                        name: servicesBox.get(0)[1],
                         icon: servicesBox.get(0)[0],
-                        price: 'R\$ 25,00',
-                        time: '45 min',
+                        price: 'R\$ ${servicesBox.get(0)[2]}',
+                        time: servicesBox.get(0)[3],
                       ),
                     ),
                     DropdownMenuItem(
                       value: 1,
                       child: ServiceDropdownitem(
-                        name: 'Barba',
+                        name: servicesBox.get(1)[1],
                         icon: servicesBox.get(1)[0],
-                        price: 'R\$ 15,00',
-                        time: '30 min',
+                        price: 'R\$ ${servicesBox.get(1)[2]}',
+                        time: servicesBox.get(1)[3],
                       ),
                     ),
                     DropdownMenuItem(
                       value: 2,
                       child: ServiceDropdownitem(
-                        name: 'Sobrancelha',
+                        name: servicesBox.get(2)[1],
                         icon: servicesBox.get(2)[0],
-                        price: 'R\$ 8,00',
-                        time: '20 min',
+                        price: 'R\$ ${servicesBox.get(2)[2]}',
+                        time: servicesBox.get(2)[3],
                       ),
                     ),
                     DropdownMenuItem(
                       value: 3,
                       child: ServiceDropdownitem(
-                        name: 'Pézinho',
+                        name: servicesBox.get(3)[1],
                         icon: servicesBox.get(3)[0],
-                        price: 'R\$ 5,00',
-                        time: '10 min',
+                        price: 'R\$ ${servicesBox.get(3)[2]}',
+                        time: servicesBox.get(3)[3],
                       ),
                     ),
                     DropdownMenuItem(
                       value: 4,
                       child: ServiceDropdownitem(
-                        name: 'Corte Navalhado',
+                        name: servicesBox.get(4)[1],
                         icon: servicesBox.get(4)[0],
-                        price: 'R\$ 30,00',
-                        time: '45 min',
+                        price: 'R\$ ${servicesBox.get(4)[2]}',
+                        time: servicesBox.get(4)[3],
                       ),
                     ),
                     DropdownMenuItem(
                       value: 5,
                       child: ServiceDropdownitem(
-                        name: 'Desenho',
+                        name: servicesBox.get(5)[1],
                         icon: servicesBox.get(5)[0],
-                        price: 'R\$ 3,00',
-                        time: '10 min',
+                        price: 'R\$ ${servicesBox.get(5)[2]}',
+                        time: servicesBox.get(5)[3],
                       ),
                     ),
                   ],
@@ -156,23 +157,17 @@ class _BookingPageState extends State<BookingPage> {
                         return Padding(
                           padding: const EdgeInsets.all(8),
                           child: InkWell(
-                            onTap: () {
-                              setState(() {
+                            onTap: () async{
+                              selectedDay = index;
+                              await FirestoreService().loadHorarios(
+                                  'rose@gmail.com',
+                                  '${DateTime.now().add(Duration(days: index)).day.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).month.toString().padLeft(2, '0')}',
+                                );
+                              setState((){
                                 hasDay = true;
-                                selectedDay = index;
                                 selectedHour = null;
                                 hasHour = false;
                               });
-                              if (index == 1) {
-                                loadHorarios2();
-                              } else {
-                                loadHorarios();
-                              }
-                              print(
-                                DateTime.now().add(
-                                  Duration(days: index),
-                                ),
-                              );
                             },
                             child: Container(
                               width: 80,
@@ -276,8 +271,6 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                   ),
                   onPressed: () {
-                    print(selectedDay);
-                    print(selectedHour);
                     showDialog(
                       context: context,
                       builder: (context) {
