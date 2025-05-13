@@ -21,6 +21,7 @@ void main() async {
   servicesLenght.value = servicesBox.length;
   bookingsLenght.value = bookingsBox.length;
   await FirestoreService().loadServices();
+  print(DateTime.now());
   runApp(Phoenix(child: const MyApp()));
 }
 

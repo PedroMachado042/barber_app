@@ -44,6 +44,7 @@ class FirestoreService {
       return;
     }
     for (String s in data[date]) {
+      // adicionar do firebase pra box
       horariosBox.put(i, s);
       i += 1;
     }
@@ -71,6 +72,8 @@ class FirestoreService {
     String prof,
     String date,
     String time,
+    int serviceNum,
+    String preparedTime,
   ) async {
     await FirebaseFirestore.instance
         .collection('Professionals')
@@ -80,10 +83,28 @@ class FirestoreService {
         .update({
           date: FieldValue.arrayRemove([time]),
         });
+    QuerySnapshot agendamentosLenght =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(prof)
+            .collection('agendamentos')
+            .get();
+    await firestore
+        .collection('Professionals')
+        .doc(prof)
+        .collection('agendamentos')
+        .doc('agendamento${agendamentosLenght.docs.length}')
+        .set({
+          'icon': servicesBox.get(serviceNum)[0],
+          'name': servicesBox.get(serviceNum)[1],
+          'time': preparedTime,
+          'client': user!.email,
+          'timestamp': Timestamp.now(),
+        });
   }
 
   Future<void> changeHorarios(String prof, List newHorarios) async {
-    return firestore
+    await firestore
         .collection('Professionals')
         .doc(prof)
         .collection('horarios')
@@ -92,19 +113,20 @@ class FirestoreService {
   }
 
   Future<void> setAppointments(
-    int icon,
-    String name,
+    int serviceNum,
     String time,
+    String prof,
   ) async {
-    return firestore
+    await firestore
         .collection('Clients')
         .doc(user!.email!)
         .collection('agendamentos')
         .doc('agendamento${bookingsBox.length - 1}')
         .set({
-          'icon': icon,
-          'name': name,
+          'icon': servicesBox.get(serviceNum)[0],
+          'name': servicesBox.get(serviceNum)[1],
           'time': time,
+          'prof': prof,
           'timestamp': Timestamp.now(),
         });
   }
@@ -128,9 +150,6 @@ class FirestoreService {
       i += 1;
     }
     bookingsLenght.value = i;
-    print(bookingsLenght.value);
-    print('AIUFBWAIUGBIUAWUBGIUAWBGIUGWBAIGBWAGU');
-    print(bookingsBox.toMap());
   }
 
   Future<void> deleteCollection() async {
@@ -144,5 +163,19 @@ class FirestoreService {
       await doc.reference.delete();
     }
   */
+  }
+
+  Future<void> checkIsADM() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      if (doc.id == user!.email!) {
+        isADM.value = true;
+        return;
+      }
+    }
+    isADM.value = false;
   }
 }

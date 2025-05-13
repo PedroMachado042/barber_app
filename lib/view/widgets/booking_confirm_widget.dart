@@ -151,11 +151,13 @@ class BookingConfirmWidget extends StatelessWidget {
                   'rose@gmail.com',
                   '${time.day.toString().padLeft(2, '0')}-${time.month.toString().padLeft(2, '0')}',
                   horariosBox.get(hour),
+                  service!,
+                  '$preparedTime',
                 );
                 await FirestoreService().setAppointments(
-                  servicesBox.get(service)[0],
-                  servicesBox.get(service)[1],
-                  '$preparedTime'
+                  service!,
+                  '$preparedTime',
+                  'rose@gmail.com'
                 );
                 /*
                 showDialog(

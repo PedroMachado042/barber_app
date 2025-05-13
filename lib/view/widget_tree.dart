@@ -46,6 +46,11 @@ class _WidgetTreeState extends State<WidgetTree> {
           print(horariosBox.values);
           print(bookingsBox.values);
           print(servicesBox.values);
+          loadHorarios();
+          FirestoreService().changeHorarios(
+            'rose@gmail.com',
+            DummyData.horarios,
+          );
         },
       ),
     );
