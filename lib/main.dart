@@ -7,6 +7,10 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
 
+Future<void> checkADM() async {
+  await FirestoreService().checkIsADM();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -18,10 +22,13 @@ void main() async {
   var bookingsBox = await Hive.openBox('bookingsBox');
   // ignore: unused_local_variable
   var horariosBox = await Hive.openBox('horariosBox');
+  // ignore: unused_local_variable
+  var calendarBox = await Hive.openBox('calendarBox');
   servicesLenght.value = servicesBox.length;
   bookingsLenght.value = bookingsBox.length;
   await FirestoreService().loadServices();
   print(DateTime.now());
+  await checkADM();
   runApp(Phoenix(child: const MyApp()));
 }
 

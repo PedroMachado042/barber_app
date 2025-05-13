@@ -152,7 +152,7 @@ class _BookingPageState extends State<BookingPage> {
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: 7,
+                      itemCount: 30,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8),

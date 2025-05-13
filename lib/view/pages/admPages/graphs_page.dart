@@ -17,14 +17,26 @@ class GraphsPage extends StatelessWidget {
         child: Column(
           spacing: 5,
           children: [
-            Icon(
-              Icons.auto_graph,
-              color: Colors.amber,
-              size: 40,
-            ),
+            Icon(Icons.auto_graph, color: Colors.amber, size: 40),
             Divider(),
             Column(
-              children: [],
+              children: [
+                SizedBox(height: 250),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.warning, size: 30, color: Colors.red),
+                    Text(
+                      'to fazendo ainda...',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Icon(Icons.warning, size: 30, color: Colors.red),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

@@ -8,6 +8,7 @@ class FirestoreService {
   final User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final bookingsBox = Hive.box('bookingsBox');
+  final calendarBox = Hive.box('calendarBox');
 
   Future<void> loadServices() async {
     int i = 0;
@@ -171,11 +172,85 @@ class FirestoreService {
             .collection('Professionals')
             .get();
     for (DocumentSnapshot doc in snapshot.docs) {
-      if (doc.id == user!.email!) {
-        isADM.value = true;
-        return;
-      }
+      if (user != null)
+        if (doc.id == user!.email!) {
+          isADM.value = true;
+          return;
+        }
     }
     isADM.value = false;
+  }
+
+  Future<void> setUsername() async {
+    await FirebaseFirestore.instance
+        .collection(isADM.value ? 'Professionals' : 'Clients')
+        .doc(user!.email)
+        .collection('username')
+        .doc('username')
+        .set({'name': user!.displayName});
+  }
+
+  Future<void> getCalendarPage(
+    int pageDay,
+    int pageMonth,
+    int pageYear,
+  ) async {
+    //pegar todos os agendamentos de um dia especifico e botar na box calendarBox
+    int i = 0;
+    calendarBox.clear();
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(user!.email!)
+            .collection('agendamentos')
+            .get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      DateTime bookingTime = DateTime.parse(doc['time']);
+      if (bookingTime.day == pageDay &&
+          bookingTime.month == pageMonth &&
+          bookingTime.year == pageYear) {
+        DocumentSnapshot client =
+            await FirebaseFirestore.instance
+                .collection('Clients')
+                .doc(doc['client'])
+                .collection('username')
+                .doc('username')
+                .get();
+        String clientName = client.get('name');
+        print(doc['time']);
+        String hour =
+            '${(bookingTime.hour).toString().padLeft(2, '0')}:${(bookingTime.minute).toString().padLeft(2, '0')}';
+        calendarBox.put(i, [
+          doc['icon'],
+          doc['name'],
+          clientName,
+          doc['client'],
+          hour,
+        ]);
+        i += 1;
+      }
+    }
+    calendarLenght.value = i;
+    print("Calendar lenght: ${calendarLenght.value}");
+    print("Calendar box: ${calendarBox.toMap()}");
+  }
+
+  Future<List<int>> colorCalendar(int pageMonth, int pageYear) async {
+    //pegar o numero de agendamentos para cada dia do mês e botar numa lista
+    List<int> bookingsCounter = List.filled(31, 0);
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(user!.email!)
+            .collection('agendamentos')
+            .get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      DateTime bookingTime = DateTime.parse(doc['time']);
+      if (bookingTime.month == pageMonth &&
+          bookingTime.year == pageYear) {
+        bookingsCounter[bookingTime.day]++;
+      }
+    }
+    return bookingsCounter;
   }
 }

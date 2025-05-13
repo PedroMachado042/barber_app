@@ -57,7 +57,7 @@ class _DrawerPageState extends State<DrawerPage> {
         ),
         ListTile(
           leading: Icon(Icons.logout),
-          title: Text("Log Out"),
+          title: Text("Sair"),
           onTap: () {
             AuthService().signout(false,context);
           },
@@ -65,7 +65,7 @@ class _DrawerPageState extends State<DrawerPage> {
         ListTile(
           leading: Icon(Icons.delete_forever, color: Colors.red),
           title: Text(
-            "Delete Account",
+            "Deletar Conta",
             style: TextStyle(color: Colors.red),
           ),
           onTap: () {
@@ -74,8 +74,8 @@ class _DrawerPageState extends State<DrawerPage> {
               builder: (context) {
                 return AlertDialog(
                   actionsAlignment: MainAxisAlignment.spaceBetween,
-                  title: Text('Delete Account?'),
-                  content: Text('there is no coming back, bro'),
+                  title: Text('Deletar Conta?'),
+                  content: Text('É isso então, vai com Deus'),
                   actions: [
                     FilledButton(
                       onPressed: () async {
@@ -102,7 +102,7 @@ class _DrawerPageState extends State<DrawerPage> {
                         ),
                       ),
                       child: Text(
-                        'Delete',
+                        'Deletar',
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -111,9 +111,7 @@ class _DrawerPageState extends State<DrawerPage> {
                         Navigator.pop(context);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: const Color(
-                          0xFFD0BFFF,
-                        ), // soft lavender
+                        backgroundColor: const Color.fromARGB(255, 190, 189, 192), // soft lavender
                         foregroundColor: Colors.black87,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 28,
@@ -127,7 +125,7 @@ class _DrawerPageState extends State<DrawerPage> {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      child: Text('Close'),
+                      child: Text('Cancelar'),
                     ),
                   ],
                 );

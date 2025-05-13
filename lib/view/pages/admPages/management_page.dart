@@ -24,7 +24,21 @@ class ManagementPage extends StatelessWidget {
             ),
             Divider(),
             Column(
-              children: [],
+              children: [SizedBox(height: 250),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.warning, size: 30, color: Colors.red),
+                    Text(
+                      'to fazendo ainda...',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Icon(Icons.warning, size: 30, color: Colors.red),
+                  ],
+                ),],
             ),
           ],
         ),

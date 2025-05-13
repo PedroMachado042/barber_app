@@ -1,3 +1,4 @@
+import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/widgets/calendar_tile_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,18 @@ class CalendarDayPage extends StatelessWidget {
             SizedBox(
               height: 500,
               child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
-                    2,
-                    (index) => CalendarTile(id: 2,),
-                  ),
+                child: ValueListenableBuilder(
+                  valueListenable: calendarLenght,
+                  builder: (context, calendarLenght, child) {
+                    return calendarLenght > 0
+                        ? Column(
+                          children: List.generate(
+                            calendarLenght,
+                            (index) => CalendarTile(id: index),
+                          ),
+                        )
+                        : Column(children: [SizedBox(height: 50,),Text('Ainda não há agendamentos', style: TextStyle(fontSize: 22,color: Colors.white38),)],);
+                  },
                 ),
               ),
             ),

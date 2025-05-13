@@ -25,6 +25,8 @@ class AuthService {
             password: password,
           );
       await userCredential.user!.updateDisplayName(username);
+      await FirestoreService().checkIsADM();
+      await FirestoreService().setUsername();
       isLogged.value = true;
       Navigator.pop(context);
       Navigator.push(
@@ -62,6 +64,7 @@ class AuthService {
         email: email,
         password: password,
       );
+      await FirestoreService().checkIsADM();
       isLogged.value = true;
       Navigator.pop(context);
       Navigator.push(
@@ -88,7 +91,7 @@ class AuthService {
 
   //--------------------------------------------------------------------------
 
-  Future<void> signout(bool delete,context) async {
+  Future<void> signout(bool delete, context) async {
     delete
         ? [
           await FirestoreService().deleteCollection(),
@@ -136,6 +139,8 @@ class AuthService {
       idToken: gAuth.idToken,
     );
     await firebaseAuth.signInWithCredential(credential);
+    await FirestoreService().checkIsADM();
+    await FirestoreService().setUsername();
     isLogged.value = true;
     Navigator.push(
       context,

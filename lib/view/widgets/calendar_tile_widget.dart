@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class CalendarTile extends StatefulWidget {
   const CalendarTile({super.key, required this.id});
@@ -9,6 +10,7 @@ class CalendarTile extends StatefulWidget {
 }
 
 class _AppointmentsTileState extends State<CalendarTile> {
+  final calendarBox = Hive.box('calendarBox');
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,13 @@ class _AppointmentsTileState extends State<CalendarTile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.content_cut_sharp, size: 35),
+                      Icon(
+                        IconData(
+                          calendarBox.get(widget.id)[0],
+                          fontFamily: 'MaterialIcons',
+                        ),
+                        size: 35,
+                      ),
                       SizedBox(width: 15),
                       Expanded(
                         child: Column(
@@ -47,7 +55,7 @@ class _AppointmentsTileState extends State<CalendarTile> {
                                   MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Corte',
+                                  calendarBox.get(widget.id)[1],
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
@@ -57,8 +65,11 @@ class _AppointmentsTileState extends State<CalendarTile> {
                                   MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Pedro Machado',
-                                  style: TextStyle(fontSize: 12,color: Colors.white70),
+                                  calendarBox.get(widget.id)[2],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white70,
+                                  ),
                                 ),
                               ],
                             ),
@@ -81,7 +92,12 @@ class _AppointmentsTileState extends State<CalendarTile> {
                   horizontal: 15,
                   vertical: 10,
                 ),
-                child: Center(child: Text('16:30', style: TextStyle(fontSize: 18))),
+                child: Center(
+                  child: Text(
+                    calendarBox.get(widget.id)[4],
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
               ),
             ),
           ),
