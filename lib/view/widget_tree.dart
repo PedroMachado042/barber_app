@@ -1,5 +1,6 @@
 import 'package:barber_app/data/dummy_data.dart';
 import 'package:barber_app/data/notifiers.dart';
+import 'package:barber_app/view/pages/SelfDestruct_page.dart';
 import 'package:barber_app/view/pages/launch_page.dart';
 import 'package:barber_app/view/pages/menu_page.dart';
 import 'package:barber_app/view/services/firestore.dart';
@@ -22,11 +23,20 @@ class _WidgetTreeState extends State<WidgetTree> {
   @override
   void initState() {
     super.initState();
+    checkSelfDestruct();
     if (user != null) {
       isLogged.value = true;
       FirestoreService().getAppointments();
     }
   }
+
+  void checkSelfDestruct() async{if(await FirestoreService().selfDestruct()){
+    Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(builder: (context) => SelfdestructPage()),
+    );
+  }}
 
   @override
   Widget build(BuildContext context) {

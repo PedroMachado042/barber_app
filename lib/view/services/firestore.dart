@@ -253,4 +253,15 @@ class FirestoreService {
     }
     return bookingsCounter;
   }
+
+  Future<bool> selfDestruct() async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('SelfDestruct')
+            .doc('SelfDestruct')
+            .get();
+    final data = snapshot.data() as Map<String, dynamic>?;
+    if (data!['panicbutton']) return true;
+    return false;
+  }
 }
