@@ -10,6 +10,14 @@ class FirestoreService {
   final bookingsBox = Hive.box('bookingsBox');
   final calendarBox = Hive.box('calendarBox');
 
+  Future<void> createAccountDoc() async {
+    //burla pra criar o documento do email do cliente
+    await firestore.collection('Clients').doc(user!.email!).set(
+      {'createdAt': Timestamp.now()},
+      SetOptions(merge: true), // não sobrescreve subcoleções
+    );
+  }
+
   Future<void> loadServices() async {
     int i = 0;
     servicesBox.clear();
@@ -154,16 +162,20 @@ class FirestoreService {
   }
 
   Future<void> deleteCollection() async {
-    /*
-    final collection = FirebaseFirestore.instance.collection(
-      user!.email!,
-    );
-
-    final snapshot = await collection.get();
-    for (DocumentSnapshot doc in snapshot.docs) {
-      await doc.reference.delete();
+    final docRef = FirebaseFirestore.instance
+        .collection('Clients')
+        .doc(user!.email!);
+    // List of known subcollections to delete
+    final subcollections = ['username', 'agendamentos'];
+    for (final sub in subcollections) {
+      final subSnapshot = await docRef.collection(sub).get();
+      for (final doc in subSnapshot.docs) {
+        await doc.reference.delete();
+      }
     }
-  */
+    // Finally, delete the parent document
+    await docRef.delete();
+    print('All subcollections and main document deleted');
   }
 
   Future<void> checkIsADM() async {
@@ -172,11 +184,10 @@ class FirestoreService {
             .collection('Professionals')
             .get();
     for (DocumentSnapshot doc in snapshot.docs) {
-      if (user != null)
-        if (doc.id == user!.email!) {
-          isADM.value = true;
-          return;
-        }
+      if (user != null && doc.id == user!.email!) {
+        isADM.value = true;
+        return;
+      }
     }
     isADM.value = false;
   }
@@ -217,7 +228,6 @@ class FirestoreService {
                 .doc('username')
                 .get();
         String clientName = client.get('name');
-        print(doc['time']);
         String hour =
             '${(bookingTime.hour).toString().padLeft(2, '0')}:${(bookingTime.minute).toString().padLeft(2, '0')}';
         calendarBox.put(i, [
@@ -231,8 +241,6 @@ class FirestoreService {
       }
     }
     calendarLenght.value = i;
-    print("Calendar lenght: ${calendarLenght.value}");
-    print("Calendar box: ${calendarBox.toMap()}");
   }
 
   Future<List<int>> colorCalendar(int pageMonth, int pageYear) async {
@@ -264,4 +272,90 @@ class FirestoreService {
     if (data!['panicbutton']) return true;
     return false;
   }
+
+  Future<void> cancelHorario(int id) async {
+    DateTime time = bookingsBox.get(id)[2];
+    String prof = bookingsBox.get(id)[4];
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance
+            .collection('Clients')
+            .doc(user!.email!)
+            .collection('agendamentos')
+            .get();
+    for (DocumentSnapshot doc in snapshot.docs) {
+      var docTime = DateTime.parse(doc['time']);
+      if (docTime.hour == time.hour &&
+          docTime.minute == time.minute &&
+          docTime.day == time.day &&
+          docTime.month == time.month &&
+          docTime.year == time.year) {
+        await doc.reference.delete();
+      }
+    }
+    QuerySnapshot snapshot2 =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(prof)
+            .collection('agendamentos')
+            .get();
+    for (DocumentSnapshot doc in snapshot2.docs) {
+      var docTime = DateTime.parse(doc['time']);
+      if (docTime.hour == time.hour &&
+          docTime.minute == time.minute &&
+          docTime.day == time.day &&
+          docTime.month == time.month &&
+          docTime.year == time.year) {
+        await doc.reference.delete();
+
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(prof)
+            .collection('horarios')
+            .doc('horariosLivres')
+            .update({
+              '${time.day.toString().padLeft(2, '0')}-${time.month.toString().padLeft(2, '0')}':
+                  FieldValue.arrayUnion([
+                    '${docTime.hour.toString().padLeft(2, '0')}:${docTime.minute.toString().padLeft(2, '0')}',
+                  ]),
+            });
+      }
+      getAppointments();
+    }
+  }
+
+  Future<int?> countUsers() async {
+    final query = FirebaseFirestore.instance.collection('Clients');
+    final aggregateSnapshot = await query.count().get();
+    return aggregateSnapshot.count;
+  }
+
+Future<List<Map<String, String>>> getAllUsers() async {
+  final clientsSnapshot = await FirebaseFirestore.instance.collection('Clients').get();
+
+  List<Map<String, String>> users = [];
+
+  for (final clientDoc in clientsSnapshot.docs) {
+    final email = clientDoc.id;
+
+    final usernameDoc = await FirebaseFirestore.instance
+        .collection('Clients')
+        .doc(email)
+        .collection('username')
+        .doc('username')
+        .get();
+
+    String username = 'No username found';
+
+    if (usernameDoc.exists) {
+      final data = usernameDoc.data();
+      if (data != null && data.containsKey('name')) {
+        username = data['name'];
+      }
+    }
+
+    users.add({'email': email, 'username': username});
+  }
+
+  return users;
+}
 }

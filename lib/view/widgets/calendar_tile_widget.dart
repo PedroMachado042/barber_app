@@ -30,7 +30,9 @@ class _AppointmentsTileState extends State<CalendarTile> {
               elevation: 15,
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
-                onTap: () {},
+                onTap: () {
+                  print(calendarBox.toMap());
+                },
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 20,

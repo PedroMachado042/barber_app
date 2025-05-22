@@ -27,9 +27,11 @@ class AuthService {
       await userCredential.user!.updateDisplayName(username);
       await FirestoreService().checkIsADM();
       await FirestoreService().setUsername();
+      await FirestoreService().createAccountDoc();
       isLogged.value = true;
+      print('signup');
       Navigator.pop(context);
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MenuPage()),
       );
@@ -66,8 +68,9 @@ class AuthService {
       );
       await FirestoreService().checkIsADM();
       isLogged.value = true;
+      print('signin');
       Navigator.pop(context);
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MenuPage()),
       );
@@ -141,8 +144,9 @@ class AuthService {
     await firebaseAuth.signInWithCredential(credential);
     await FirestoreService().checkIsADM();
     await FirestoreService().setUsername();
+    await FirestoreService().createAccountDoc();
     isLogged.value = true;
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MenuPage()),
     );

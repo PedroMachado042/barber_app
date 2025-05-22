@@ -30,13 +30,15 @@ class _WidgetTreeState extends State<WidgetTree> {
     }
   }
 
-  void checkSelfDestruct() async{if(await FirestoreService().selfDestruct()){
-    Navigator.pushReplacement(
-      // ignore: use_build_context_synchronously
-      context,
-      MaterialPageRoute(builder: (context) => SelfdestructPage()),
-    );
-  }}
+  void checkSelfDestruct() async {
+    if (await FirestoreService().selfDestruct()) {
+      Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => SelfdestructPage()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,18 +51,18 @@ class _WidgetTreeState extends State<WidgetTree> {
       ),
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.black,
-        onPressed: () {
-          print(user);
-          print(isLogged);
+        onPressed: () async {
+          //print(user);
+          //print(isLogged);
           //bookingsBox.clear();
-          print(horariosBox.values);
-          print(bookingsBox.values);
-          print(servicesBox.values);
-          loadHorarios();
+          //print(horariosBox.values);
+          //print(bookingsBox.values);
+          //print(servicesBox.values);
           FirestoreService().changeHorarios(
             'rose@gmail.com',
             DummyData.horarios,
           );
+          print(await FirestoreService().countUsers());
         },
       ),
     );

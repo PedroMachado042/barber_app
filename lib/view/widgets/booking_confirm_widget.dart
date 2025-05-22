@@ -1,19 +1,29 @@
 import 'package:barber_app/data/dummy_data.dart';
 import 'package:barber_app/view/services/firestore.dart';
+import 'package:barber_app/view/widgets/confirmed_alertbox.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class BookingConfirmWidget extends StatelessWidget {
+class BookingConfirmWidget extends StatefulWidget {
   const BookingConfirmWidget({
     super.key,
     required this.time,
     required this.service,
     required this.hour,
+    required this.prof,
   });
   final DateTime time;
   final int? service;
   final int hour;
+  final String prof;
 
+  @override
+  State<BookingConfirmWidget> createState() =>
+      _BookingConfirmWidgetState();
+}
+
+class _BookingConfirmWidgetState extends State<BookingConfirmWidget> {
+  bool alreadyConfirmed = false;
   @override
   Widget build(BuildContext context) {
     final bookingsBox = Hive.box('bookingsBox');
@@ -21,9 +31,11 @@ class BookingConfirmWidget extends StatelessWidget {
 
     //Calcular a soma das horas
     int tempoDuracao = int.parse(
-      (servicesBox.get(service!)[3]).split(":")[0],
+      (servicesBox.get(widget.service!)[3]).split(":")[0],
     );
-    List<String> horaInicial = horariosBox.get(hour).split(":");
+    List<String> horaInicial = horariosBox
+        .get(widget.hour)
+        .split(":");
     int minutosTotais =
         int.parse(horaInicial[0]) * 60 +
         int.parse(horaInicial[1]) +
@@ -43,7 +55,7 @@ class BookingConfirmWidget extends StatelessWidget {
               children: [
                 Icon(
                   IconData(
-                    servicesBox.get(service)[0],
+                    servicesBox.get(widget.service)[0],
                     fontFamily: 'MaterialIcons',
                   ),
                   size: 35,
@@ -53,12 +65,12 @@ class BookingConfirmWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(servicesBox.get(service)[1]),
+                    Text(servicesBox.get(widget.service)[1]),
                     SizedBox(height: 8),
                     Row(
                       children: [
                         Text(
-                          'R\$ ${servicesBox.get(service)[2]}',
+                          'R\$ ${servicesBox.get(widget.service)[2]}',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.green,
@@ -68,7 +80,7 @@ class BookingConfirmWidget extends StatelessWidget {
                         Icon(Icons.lock_clock, size: 18),
                         SizedBox(width: 5),
                         Text(
-                          '${servicesBox.get(service)[3]} min',
+                          '${servicesBox.get(widget.service)[3]} min',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -85,7 +97,7 @@ class BookingConfirmWidget extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    '${horariosBox.get(hour)} -> ${endTime}',
+                    '${horariosBox.get(widget.hour)} -> ${endTime}',
                     style: TextStyle(fontSize: 22),
                   ),
                 ),
@@ -98,15 +110,15 @@ class BookingConfirmWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${DummyData.months[time.month - 1]}',
+                          '${DummyData.months[widget.time.month - 1]}',
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          '${time.day}',
+                          '${widget.time.day}',
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          '${DummyData.weekdays[time.weekday - 1]}',
+                          '${DummyData.weekdays[widget.time.weekday - 1]}',
                           style: TextStyle(fontSize: 12),
                         ),
                       ],
@@ -126,55 +138,71 @@ class BookingConfirmWidget extends StatelessWidget {
                   5,
                 ),
               ),
-              onPressed: () async{
-                Navigator.pop(context);
-                Navigator.pop(context);
-                List<String> parts = horariosBox.get(hour).split(':');
-                DateTime preparedTime = DateTime(
-                  time.year,
-                  time.month,
-                  time.day,
-                  int.parse(parts[0]), // New hour (e.g., 3:00 PM)
-                  int.parse(parts[1]),
-                  1,
-                  0,
-                  0,
-                );
-                bookingsBox.put(bookingsBox.length, [
-                  servicesBox.get(service)[0],
-                  servicesBox.get(service)[1],
-                  preparedTime,
-                  false,
-                ]);
-                print(bookingsBox.toMap());
-                await FirestoreService().reservarHorario(
-                  'rose@gmail.com',
-                  '${time.day.toString().padLeft(2, '0')}-${time.month.toString().padLeft(2, '0')}',
-                  horariosBox.get(hour),
-                  service!,
-                  '$preparedTime',
-                );
-                await FirestoreService().setAppointments(
-                  service!,
-                  '$preparedTime',
-                  'rose@gmail.com'
-                );
-                /*
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return ConfirmedAlertbox();
-                  },
-                );*/
-              },
-              child: Text(
-                'Confirmar',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  inherit: true,
-                ),
-              ),
+              onPressed:
+                  alreadyConfirmed
+                      ? () {
+                        print('inclicavel');
+                      }
+                      : () async {
+                        setState(() {
+                          alreadyConfirmed = true;
+                        });
+                        //bloqueia o botao
+                        List<String> parts = horariosBox
+                            .get(widget.hour)
+                            .split(':');
+                        DateTime preparedTime = DateTime(
+                          widget.time.year,
+                          widget.time.month,
+                          widget.time.day,
+                          int.parse(
+                            parts[0],
+                          ), // New hour (e.g., 3:00 PM)
+                          int.parse(parts[1]),
+                          1,
+                          0,
+                          0,
+                        );
+                        bookingsBox.put(bookingsBox.length, [
+                          servicesBox.get(widget.service)[0],
+                          servicesBox.get(widget.service)[1],
+                          preparedTime,
+                          false,
+                          widget.prof,
+                        ]);
+                        await FirestoreService().reservarHorario(
+                          widget.prof,
+                          '${widget.time.day.toString().padLeft(2, '0')}-${widget.time.month.toString().padLeft(2, '0')}',
+                          horariosBox.get(widget.hour),
+                          widget.service!,
+                          '$preparedTime',
+                        );
+                        await FirestoreService().setAppointments(
+                          widget.service!,
+                          '$preparedTime',
+                          widget.prof,
+                        );
+                        await showDialog(
+                          context: context,
+                          barrierDismissible: true, // default is true
+                          builder: (context) => ConfirmedAlertbox(),
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+              child:
+                  alreadyConfirmed
+                      ? CircularProgressIndicator(
+                        color: Colors.black87,
+                      )
+                      : Text(
+                        'Confirmar',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 20,
+                          inherit: true,
+                        ),
+                      ),
             ),
           ],
         ),

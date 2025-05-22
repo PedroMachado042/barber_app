@@ -1,3 +1,4 @@
+import 'package:barber_app/view/widgets/cancel_alertbox.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -14,14 +15,6 @@ class _AppointmentsTileState extends State<AppointmentsTile> {
   @override
   void initState() {
     super.initState();
-    if (bookingsBox.get(widget.id)[2].isBefore(DateTime.now())) {
-      bookingsBox.put(widget.id, [
-        bookingsBox.get(widget.id)[0],
-        bookingsBox.get(widget.id)[1],
-        bookingsBox.get(widget.id)[2],
-        true,
-      ]);
-    }
   }
 
   Widget build(BuildContext context) {
@@ -33,7 +26,28 @@ class _AppointmentsTileState extends State<AppointmentsTile> {
         elevation: 0,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
-          onTap: () {},
+          onTap: () {
+            print(bookingsBox.get(widget.id));
+            if (!bookingsBox.get(widget.id)[3]) {
+              showDialog(
+                context: context,
+                builder: (context) => CancelAlertbox(id:widget.id),
+              );
+            }
+            /*
+            showDialog(
+              context: context,
+              builder: (context) {
+                return BookingConfirmWidget(
+                  time: DateTime.now().add(
+                    Duration(days: selectedDay!),
+                  ),
+                  hour: selectedHour!,
+                  service: selectedService,
+                );
+              },
+            );*/
+          },
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 20,
