@@ -47,6 +47,7 @@ dependencies:
   simple_heatmap_calendar: ^0.4.0
   flutter_launcher_icons: ^0.14.3
   intl: ^0.20.2
+  fl_chart: ^1.0.0
 
 dev_dependencies:
   flutter_test:

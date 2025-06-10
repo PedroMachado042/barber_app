@@ -27,7 +27,13 @@ class LocalizationPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 100,
-                  foregroundImage: AssetImage('assets/images/front.png')
+                  foregroundImage: AssetImage('assets/images/front.png'),
+                  backgroundColor: const Color.fromARGB(
+                    255,
+                    143,
+                    98,
+                    2,
+                  ),
                   ),
                 SizedBox(height: 10),
                 Text(

@@ -23,7 +23,9 @@ class _BookingPageState extends State<BookingPage> {
   bool hasDay = false;
   bool hasHour = false;
   int passedHorarios = 0;
-  String prof = 'rose@gmail.com';
+  String prof = 'adm@gmail.com';
+  Map<String, dynamic> diasDeTrabalho = {};
+  bool diaDeFolga = false;
 
   final servicesBox = Hive.box('servicesBox');
   @override
@@ -34,7 +36,8 @@ class _BookingPageState extends State<BookingPage> {
 
   void checkAppointments() async {
     int counter = await appointmentsCounter();
-    if (counter >= 3) {
+    diasDeTrabalho = await FirestoreService().getWorkdays(prof);
+    if (counter >= 3 && !isADM.value) {
       await showDialog(
         context: context,
         builder: (context) {
@@ -87,63 +90,19 @@ class _BookingPageState extends State<BookingPage> {
                     15,
                   ),
                   style: TextStyle(color: Colors.white, fontSize: 20),
-                  items: [
-                    //                                  / /ISSO É UM ITEM
-                    DropdownMenuItem(
-                      value: 0,
+                  items: List.generate(
+                    servicesLenght.value,
+                    (index) => DropdownMenuItem(
+                      value: index,
                       child: ServiceDropdownitem(
-                        name: servicesBox.get(0)[1],
-                        icon: servicesBox.get(0)[0],
-                        price: 'R\$ ${servicesBox.get(0)[2]}',
-                        time: servicesBox.get(0)[3],
+                        icon: servicesBox.get(index)[0],
+                        name: servicesBox.get(index)[1],
+                        price: 'R\$ ${servicesBox.get(index)[2]}',
+                        time: servicesBox.get(index)[3],
                       ),
                     ),
-                    DropdownMenuItem(
-                      value: 1,
-                      child: ServiceDropdownitem(
-                        name: servicesBox.get(1)[1],
-                        icon: servicesBox.get(1)[0],
-                        price: 'R\$ ${servicesBox.get(1)[2]}',
-                        time: servicesBox.get(1)[3],
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 2,
-                      child: ServiceDropdownitem(
-                        name: servicesBox.get(2)[1],
-                        icon: servicesBox.get(2)[0],
-                        price: 'R\$ ${servicesBox.get(2)[2]}',
-                        time: servicesBox.get(2)[3],
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 3,
-                      child: ServiceDropdownitem(
-                        name: servicesBox.get(3)[1],
-                        icon: servicesBox.get(3)[0],
-                        price: 'R\$ ${servicesBox.get(3)[2]}',
-                        time: servicesBox.get(3)[3],
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 4,
-                      child: ServiceDropdownitem(
-                        name: servicesBox.get(4)[1],
-                        icon: servicesBox.get(4)[0],
-                        price: 'R\$ ${servicesBox.get(4)[2]}',
-                        time: servicesBox.get(4)[3],
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 5,
-                      child: ServiceDropdownitem(
-                        name: servicesBox.get(5)[1],
-                        icon: servicesBox.get(5)[0],
-                        price: 'R\$ ${servicesBox.get(5)[2]}',
-                        time: servicesBox.get(5)[3],
-                      ),
-                    ),
-                  ],
+                  ),
+                  //                                  / /ISSO É UM ITEM
                   onChanged: (int? value) {
                     setState(() {
                       selectedService = value;
@@ -177,7 +136,7 @@ class _BookingPageState extends State<BookingPage> {
                               selectedDay = index;
                               await FirestoreService().loadHorarios(
                                 prof,
-                                '${DateTime.now().add(Duration(days: index)).day.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).month.toString().padLeft(2, '0')}',
+                                '${DateTime.now().add(Duration(days: index)).day.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).month.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).year.toString().padLeft(2, '0')}',
                               );
                               setState(() {
                                 hasDay = true;
@@ -233,7 +192,8 @@ class _BookingPageState extends State<BookingPage> {
                           selectedDay,
                         );
                         horariosLenght -= passedHorarios;
-                        return horariosLenght == 0
+                        return horariosLenght == 0 ||
+                                !diasDeTrabalho['${DummyData.weekdays[DateTime.now().add(Duration(days: selectedDay!)).weekday - 1]}']
                             ? Center(
                               child: Text(
                                 'Não há mais horários para hoje!',

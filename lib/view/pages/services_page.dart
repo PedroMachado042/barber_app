@@ -37,17 +37,22 @@ class _ServicesPageState extends State<ServicesPage> {
               size: 40,
             ),
             Divider(),
-            ValueListenableBuilder<int>(
-              valueListenable: servicesLenght,
-              builder: (context, value, child) {
-                return Column(
-                  spacing: 5,
-                  children: List.generate(
-                    value,
-                    (index) => ServicesTile(id: index),
-                  ),
-                );
-              },
+            SizedBox(
+              height: 570,
+              child: SingleChildScrollView(
+                child: ValueListenableBuilder<int>(
+                  valueListenable: servicesLenght,
+                  builder: (context, value, child) {
+                    return Column(
+                      spacing: 5,
+                      children: List.generate(
+                        value,
+                        (index) => ServicesTile(id: index),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
             
           ],

@@ -26,12 +26,15 @@ class _WidgetTreeState extends State<WidgetTree> {
     checkSelfDestruct();
     if (user != null) {
       isLogged.value = true;
-      FirestoreService().getAppointments();
+      if(isADM==false)
+      {
+        FirestoreService().getAppointments();
+      }
     }
   }
 
   void checkSelfDestruct() async {
-    if (await FirestoreService().selfDestruct()) {
+    if (await FirestoreService().checkSelfDestruct()) {
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
         context,
@@ -54,15 +57,15 @@ class _WidgetTreeState extends State<WidgetTree> {
         onPressed: () async {
           //print(user);
           //print(isLogged);
-          //bookingsBox.clear();
           //print(horariosBox.values);
           //print(bookingsBox.values);
           //print(servicesBox.values);
           FirestoreService().changeHorarios(
-            'rose@gmail.com',
+            'adm@gmail.com',
             DummyData.horarios,
           );
           print(await FirestoreService().countUsers());
+          await FirestoreService().checkIsADM();
         },
       ),
     );

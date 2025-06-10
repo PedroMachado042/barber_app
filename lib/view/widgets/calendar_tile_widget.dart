@@ -56,9 +56,14 @@ class _AppointmentsTileState extends State<CalendarTile> {
                               mainAxisAlignment:
                                   MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  calendarBox.get(widget.id)[1],
-                                  style: TextStyle(fontSize: 20),
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      calendarBox.get(widget.id)[1],
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

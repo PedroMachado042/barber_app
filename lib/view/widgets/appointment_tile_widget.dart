@@ -1,10 +1,16 @@
+import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/widgets/cancel_alertbox.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class AppointmentsTile extends StatefulWidget {
-  const AppointmentsTile({super.key, required this.id});
+  const AppointmentsTile({
+    super.key,
+    required this.id,
+    required this.email,
+  });
   final int id;
+  final String email;
 
   @override
   State<AppointmentsTile> createState() => _AppointmentsTileState();
@@ -27,11 +33,25 @@ class _AppointmentsTileState extends State<AppointmentsTile> {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            print(bookingsBox.get(widget.id));
             if (!bookingsBox.get(widget.id)[3]) {
               showDialog(
                 context: context,
-                builder: (context) => CancelAlertbox(id:widget.id),
+                builder:
+                    (context) => CancelAlertbox(
+                      id: widget.id,
+                      email: widget.email,
+                      excludingPastBooking: false,
+                    ),
+              );
+            } else if (isADM.value) {
+              showDialog(
+                context: context,
+                builder:
+                    (context) => CancelAlertbox(
+                      id: widget.id,
+                      email: widget.email,
+                      excludingPastBooking: true,
+                    ),
               );
             }
             /*

@@ -24,7 +24,7 @@ colorBookings(int monthControl) async {
   Map<DateTime, int> bookingMap = {};
 
   // Loop para percorrer os dias do mês (1 a 31)
-  for (int day = 0; day <= 30; day++) {
+  for (int day = 0; day <= 31; day++) {
     int bookingCount =
         bookingsCounter[day]; // Ajuste o índice, pois a contagem começa do dia 1
     if (bookingCount > 0) {
@@ -54,9 +54,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   void asyncColorBookings() async {
     await colorBookings(monthControl);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
@@ -67,10 +65,15 @@ class _CalendarPageState extends State<CalendarPage> {
     for (int day = 1; day <= 31; day++) {}
     final colorMap = {
       1: const Color.fromARGB(255, 100, 200, 100),
-      2: const Color.fromARGB(255, 66, 180, 66),
-      3: const Color.fromARGB(255, 33, 160, 33),
-      4: const Color.fromARGB(255, 0, 140, 0),
+      2: const Color.fromARGB(255, 100, 200, 100),
+      3: const Color.fromARGB(255, 66, 180, 66),
+      4: const Color.fromARGB(255, 66, 180, 66),
+      5: const Color.fromARGB(255, 33, 160, 33),
+      6: const Color.fromARGB(255, 33, 160, 33),
+      7: const Color.fromARGB(255, 0, 140, 0),
+      8: const Color.fromARGB(255, 0, 140, 0),
     };
+    int mes = DateTime.now().month + monthControl - 1;
     DateTime now = DateTime.now();
     return Scaffold(
       appBar: AppBar(
@@ -96,16 +99,14 @@ class _CalendarPageState extends State<CalendarPage> {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        if (monthControl > 0) {
-                          monthControl -= 1;
-                          await colorBookings(monthControl);
-                        }
+                        monthControl -= 1;
+                        await colorBookings(monthControl);
                         setState(() {});
                       },
                       icon: Icon(Icons.arrow_back, size: 35),
                     ),
                     Text(
-                      '${DummyData.months[DateTime.now().month + monthControl - 1]} - ${DateTime.now().year}',
+                      '${DummyData.months[mes - 12 * (mes / 12).floor()]} - ${DateTime.now().year + (mes / 12).floor()}',
                       style: TextStyle(fontSize: 25),
                     ),
                     IconButton(
@@ -213,7 +214,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       date.day,
                     );
                     final value = selectedMap[normalizedDate];
-                    final color = colorMap[(value ?? 0) >= 4 ? 4 : value];
+                    final color =
+                        colorMap[(value ?? 0) >= 8 ? 8 : value];
                     final dateExist;
                     if (normalizedDate.isBefore(
                           DateTime(
@@ -256,6 +258,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         child:
                             dateExist
                                 ? Stack(
+                                  alignment: Alignment.center,
                                   children: [
                                     Container(
                                       height: 58,
@@ -273,15 +276,49 @@ class _CalendarPageState extends State<CalendarPage> {
                                         borderRadius:
                                             BorderRadius.circular(5),
                                       ),
-                                      child: Text(
-                                        '${date.day}',
-                                        style: TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Stack(
+                                        children: [
+                                          if (date.day ==
+                                                  DateTime.now()
+                                                      .day &&
+                                              date.month ==
+                                                  DateTime.now()
+                                                      .month &&
+                                              date.year ==
+                                                  DateTime.now().year)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(
+                                                    5.0,
+                                                  ),
+                                              child: Container(
+                                                decoration:
+                                                    BoxDecoration(
+                                                      color:
+                                                          const Color.fromARGB(255, 184, 141, 14),
+                                                      shape:
+                                                          BoxShape
+                                                              .circle,
+                                                    ),
+                                                height: 10,
+                                                width: 10,
+                                              ),
+                                            ),
+                                          Center(
+                                            child: Text(
+                                              '${date.day}',
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 18,
+                                                fontWeight:
+                                                    FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
+                                    //realçar o dia de hoje
                                   ],
                                 )
                                 : SizedBox(height: 58),

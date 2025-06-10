@@ -172,7 +172,7 @@ class _BookingConfirmWidgetState extends State<BookingConfirmWidget> {
                         ]);
                         await FirestoreService().reservarHorario(
                           widget.prof,
-                          '${widget.time.day.toString().padLeft(2, '0')}-${widget.time.month.toString().padLeft(2, '0')}',
+                          '${widget.time.day.toString().padLeft(2, '0')}-${widget.time.month.toString().padLeft(2, '0')}-${widget.time.year.toString().padLeft(2, '0')}',
                           horariosBox.get(widget.hour),
                           widget.service!,
                           '$preparedTime',
@@ -187,6 +187,7 @@ class _BookingConfirmWidgetState extends State<BookingConfirmWidget> {
                           barrierDismissible: true, // default is true
                           builder: (context) => ConfirmedAlertbox(),
                         );
+                        FirestoreService().setUsername();
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },

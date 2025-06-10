@@ -1,11 +1,20 @@
+import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/services/firestore.dart';
 import 'package:flutter/material.dart';
 
 class CancelAlertbox extends StatelessWidget {
-  const CancelAlertbox({super.key, required this.id});
+  const CancelAlertbox({
+    super.key,
+    required this.id,
+    required this.email,
+    required this.excludingPastBooking,
+  });
   final int id;
+  final String email;
+  final bool excludingPastBooking;
   @override
   Widget build(BuildContext context) {
+    print(excludingPastBooking);
     return AlertDialog(
       //shape: BeveledRectangleBorder(),
       content: Container(
@@ -17,12 +26,14 @@ class CancelAlertbox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Cancelar Horário?',
+              excludingPastBooking?'Excluir Horário': 'Cancelar Horário?',
               style: TextStyle(fontSize: 25),
               textAlign: TextAlign.left,
             ),
             Text(
-              'Favor cancelar com pelo menos uma hora de antecedência',
+              isADM.value
+                  ? (excludingPastBooking?'Deseja excluir o horário do sistema?': 'Deseja cancelar o horário desse cliente?')
+                  : 'Favor cancelar com pelo menos uma hora de antecedência',
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,14 +63,15 @@ class CancelAlertbox extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Cancelar',
+                    excludingPastBooking?'Excluir': 'Cancelar',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                     ),
                   ),
                   onPressed: () {
-                    FirestoreService().cancelHorario(id);
+                    FirestoreService().cancelHorario(id, email);
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                 ),

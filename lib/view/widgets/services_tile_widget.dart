@@ -1,4 +1,5 @@
 import 'package:barber_app/data/dummy_data.dart';
+import 'package:barber_app/data/notifiers.dart';
 import 'package:flutter/material.dart';
 
 class ServicesTile extends StatelessWidget {
@@ -8,7 +9,7 @@ class ServicesTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: isADM.value? 270:double.infinity,
       padding: EdgeInsets.only(bottom: 0),
       child: Card(
         elevation: 0,
@@ -33,7 +34,7 @@ class ServicesTile extends StatelessWidget {
                           servicesBox.get(id)[1],
                           style: TextStyle(fontSize: 19),
                         ),
-                        Text(
+                        isADM.value?SizedBox(): Text(
                           'R\$${servicesBox.get(id)[2]}',
                           style: TextStyle(fontSize: 19),
                         ),
@@ -45,6 +46,10 @@ class ServicesTile extends StatelessWidget {
                         Icon(Icons.access_time, size: 16),
                         Text(
                           ' ${servicesBox.get(id)[3]}',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        !isADM.value?SizedBox(): Text(
+                          '  -  R\$${servicesBox.get(id)[2]}',
                           style: TextStyle(fontSize: 12),
                         ),
                       ],

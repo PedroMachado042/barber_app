@@ -11,6 +11,7 @@ import 'package:hive/hive.dart';
 class AuthService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final bookingsBox = Hive.box('bookingsBox');
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
   Future<void> signup({
     required String username,
@@ -130,11 +131,9 @@ class AuthService {
   Future<void> signInWithGoogle(context) async {
     await GoogleSignIn().signOut();
 
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-
+    final gUser = await _googleSignIn.signIn();
     if (gUser == null) return;
-
-    final GoogleSignInAuthentication gAuth =
+    final gAuth =
         await gUser.authentication;
 
     final credential = GoogleAuthProvider.credential(

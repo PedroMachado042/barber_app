@@ -1,5 +1,6 @@
 import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/widgets/appointment_tile_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -13,6 +14,8 @@ class AppointmentsPage extends StatefulWidget {
 
 class _AppointmentsPageState extends State<AppointmentsPage> {
   final bookingsBox = Hive.box('bookingsBox');
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +55,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                           children: List.generate(
                             value,
                             (index) => AppointmentsTile(
-                              id: (bookingsLenght.value - 1) - index,
+                              id: (bookingsLenght.value - 1) - index,email: user!.email!
                             ),
                           ),
                         )

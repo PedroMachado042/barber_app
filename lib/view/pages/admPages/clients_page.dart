@@ -1,4 +1,5 @@
 import 'package:barber_app/view/services/firestore.dart';
+import 'package:barber_app/view/widgets/client_tile_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,7 @@ class _ClientsPageState extends State<ClientsPage> {
               height: 550,
               child:
                   usersCount == 0
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: CircularProgressIndicator(color: Colors.white,))
                       : GridView.builder(
                         itemCount: usersCount,
                         gridDelegate:
@@ -53,61 +54,7 @@ class _ClientsPageState extends State<ClientsPage> {
                             ),
                         itemBuilder: (context, index) {
                           final user = allUsers[index];
-                          List<String> names = user['username']!
-                              .split(' ');
-                          return Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Card(
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
-                                onTap: () {
-                                  print(user['email']);
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 5),
-                                    CircleAvatar(
-                                      radius: 8,
-                                      backgroundColor: Colors.black38,
-                                    ),
-                                    SizedBox(height: 5),
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: Colors.black45,
-                                      foregroundImage: AssetImage(
-                                        'assets/images/guestPic.png',
-                                      ),
-                                    ),
-                                    SizedBox(height: 5),
-                                    SizedBox(
-                                      height: 40,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            names[0],
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          if (names.length > 1)
-                                            Text(
-                                              names[1],
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          return ClientTileWidget(userData: user,);
                         },
                       ),
             ),

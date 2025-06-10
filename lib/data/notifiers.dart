@@ -7,5 +7,6 @@ ValueNotifier<int> calendarLenght = ValueNotifier(0);
 
 ValueNotifier<bool> isLogged = ValueNotifier(false);
 ValueNotifier<bool> isADM = ValueNotifier(false);
+ValueNotifier<bool> showRevenue = ValueNotifier(false);
 
 ValueNotifier<Map<DateTime, int>> bookingMapNotifier = ValueNotifier({});
