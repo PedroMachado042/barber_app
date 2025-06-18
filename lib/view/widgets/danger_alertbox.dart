@@ -46,7 +46,7 @@ class _DangerAlertboxState extends State<DangerAlertbox> {
                   },
                 ),
                 Text(
-                  'Contiunuar a operação',
+                  'Continuar a operação',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white54,

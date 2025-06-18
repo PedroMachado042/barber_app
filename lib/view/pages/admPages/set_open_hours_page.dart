@@ -1,6 +1,7 @@
 import 'package:barber_app/view/services/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SetOpenHoursPage extends StatefulWidget {
   const SetOpenHoursPage({super.key});
@@ -453,17 +454,21 @@ class _EditServicesPageState extends State<SetOpenHoursPage> {
                     ),
                     onPressed: () async {
                       await FirestoreService().setWorktime(dias, [
-                        '${6 + (startingHour / 2.floor()).toInt()}:${startingHour % 2 == 0 ? 0 : 3}0',
-                        '${21 + (-endingHour / 2.floor()).toInt()}:${endingHour % 2 == 0 ? 3 : 0}0',
-                        hasInterval
-                            ? '${6 + (startingIntervalHour / 2.floor()).toInt()}:${startingIntervalHour % 2 == 0 ? 0 : 3}0'
-                            : '',
-                        hasInterval
-                            ? '${21 + (-endingIntervalHour / 2.floor()).toInt()}:${endingIntervalHour % 2 == 0 ? 3 : 0}0'
-                            : '',
-                      ]);
-                      Navigator.pop(context);
-                      print(DateTime.now().weekday);
+                          '${6 + (startingHour / 2.floor()).toInt()}:${startingHour % 2 == 0 ? 0 : 3}0',
+                          '${21 + (-endingHour / 2.floor()).toInt()}:${endingHour % 2 == 0 ? 3 : 0}0',
+                          hasInterval
+                              ? '${6 + (startingIntervalHour / 2.floor()).toInt()}:${startingIntervalHour % 2 == 0 ? 0 : 3}0'
+                              : '',
+                          hasInterval
+                              ? '${21 + (-endingIntervalHour / 2.floor()).toInt()}:${endingIntervalHour % 2 == 0 ? 3 : 0}0'
+                              : '',
+                        ]);
+                        Navigator.pop(context);
+                        print(DateTime.now().weekday);
+                      Fluttertoast.showToast(
+                        msg: 'Horários alterados com sucesso!',
+                        backgroundColor: Colors.black87,
+                      );
                     },
                     child: Text(
                       'Confirmar',

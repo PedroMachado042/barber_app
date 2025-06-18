@@ -1,4 +1,5 @@
 import 'package:barber_app/view/pages/admPages/edit_services_page.dart';
+import 'package:barber_app/view/pages/admPages/set_break_days_page.dart';
 import 'package:barber_app/view/pages/admPages/set_open_hours_page.dart';
 import 'package:barber_app/view/pages/booking_page.dart';
 import 'package:barber_app/view/widgets/danger_alertbox.dart';
@@ -16,16 +17,22 @@ class ManagementPage extends StatelessWidget {
         title: Text('Configurar'),
         backgroundColor: CupertinoColors.placeholderText,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(30),
-        child: Column(
-          spacing: 5,
-          children: [
-            Icon(Icons.settings, color: Colors.amber, size: 40),
-            Divider(),
-            Column(
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 30,right: 30,left: 30,bottom: 15),
+            child: Column(
+              spacing: 5,
+              children: [
+                Icon(Icons.settings, color: Colors.amber, size: 40),
+                Divider(),
+              ],
+            ),
+          ),
+          Column(
               children: [
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(Icons.list),
                   title: Text(
                     "Definir Serviços",
@@ -46,6 +53,7 @@ class ManagementPage extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(Icons.more_time),
                   title: Text(
                     "Definir Horários",
@@ -66,6 +74,7 @@ class ManagementPage extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(Icons.calendar_month),
                   title: Text(
                     "Definir Férias",
@@ -76,9 +85,17 @@ class ManagementPage extends StatelessWidget {
                     size: 20,
                     color: Colors.white54,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SetBreakDaysPage(),
+                      ),
+                    );
+                  },
                 ),
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(Icons.person),
                   title: Text(
                     "Criar Agendamento",
@@ -99,6 +116,7 @@ class ManagementPage extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(Icons.people_outline),
                   enabled: false,
                   title: Text(
@@ -115,6 +133,7 @@ class ManagementPage extends StatelessWidget {
                 SizedBox(height: 100),
                 Divider(),
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(
                     Icons.delete_sweep,
                     color: Colors.red,
@@ -135,6 +154,7 @@ class ManagementPage extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  contentPadding: EdgeInsets.only(left: 25,right: 25),
                   leading: Icon(Icons.warning, color: Colors.red),
                   title: Text(
                     "Desativação Total",
@@ -153,8 +173,7 @@ class ManagementPage extends StatelessWidget {
                 ),
               ],
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
