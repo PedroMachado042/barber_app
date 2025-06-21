@@ -18,13 +18,14 @@ class CancelAlertbox extends StatelessWidget {
     return AlertDialog(
       //shape: BeveledRectangleBorder(),
       content: Container(
-        height: 160,
+        height: excludingPastBooking?140:160,
         width: 300,
         padding: EdgeInsets.symmetric(horizontal: 5),
         child: Column(
-          spacing: 15,
+          spacing: 10,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 0,),
             Text(
               excludingPastBooking?'Excluir Horário': 'Cancelar Horário?',
               style: TextStyle(fontSize: 25),

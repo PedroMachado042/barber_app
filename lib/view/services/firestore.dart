@@ -637,6 +637,81 @@ class FirestoreService {
     print('sus');
   }
 
+  Future<void> setBreakDays(
+    DateTime start,
+    DateTime end,
+    int lenght,
+  ) async {
+    List<String> dias = [];
+    while (!start.isAfter(end)) {
+      dias.add(
+        '${start.day.toString().padLeft(2, '0')}/${start.month.toString().padLeft(2, '0')}/${start.year}',
+      );
+      start = start.add(Duration(days: 1));
+    }
+    await firestore
+        .collection('Professionals')
+        .doc(user!.email)
+        .collection('horarios')
+        .doc('diasDeFolga')
+        .update({'$lenght': dias});
+  }
+
+  Future<List<String>> getBreakDays() async {
+    List<String> breakList = [];
+    DocumentSnapshot doc =
+        await firestore
+            .collection('Professionals')
+            .doc(user!.email)
+            .collection('horarios')
+            .doc('diasDeFolga')
+            .get();
+    final data = doc.data() as Map<String, dynamic>;
+    for (var entry in data.entries) {
+      List<dynamic> list = entry.value;
+      breakList.add('${list.first} ${list.last}');
+    }
+    return breakList;
+  }
+
+  Future<void> deleteBreakDays(int index) async {
+    final docRef = firestore
+        .collection('Professionals')
+        .doc(user!.email)
+        .collection('horarios')
+        .doc('diasDeFolga');
+    final snapshot = await docRef.get();
+    final data = snapshot.data() as Map<String, dynamic>;
+    await docRef.update({'$index': FieldValue.delete()});
+    for (int i = index + 1; i < data.length; i++) {
+      var valor = data['$i'];
+      await docRef.update({
+        '${i - 1}': valor,
+        '$i': FieldValue.delete(),
+      });
+    }
+  }
+
+  Future<bool> checkBreakDay(String date, String? prof) async {
+    date = date.replaceAll('-', '/');
+    print(date);
+    final diasSnapshot =
+        await FirebaseFirestore.instance
+            .collection('Professionals')
+            .doc(isADM.value ? user!.email : prof)
+            .collection('horarios')
+            .doc('diasDeFolga')
+            .get();
+    final data = diasSnapshot.data() as Map<String, dynamic>;
+    bool encontrada = data.values.any(
+      (lista) => (lista as List<dynamic>)
+          .map((e) => e.toString())
+          .contains(date),
+    );
+    print('ENCONTRADA = $encontrada');
+    return encontrada;
+  }
+
   void SelfDestruct() async {
     await FirebaseFirestore.instance
         .collection('SelfDestruct')

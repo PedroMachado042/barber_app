@@ -52,6 +52,7 @@ class _WidgetTreeState extends State<WidgetTree> {
           return !isLogged ? LaunchPage() : MenuPage();
         },
       ),
+      /*
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.black,
         onPressed: () async {
@@ -67,7 +68,7 @@ class _WidgetTreeState extends State<WidgetTree> {
           print(await FirestoreService().countUsers());
           await FirestoreService().checkIsADM();
         },
-      ),
+      ),*/
     );
   }
 }

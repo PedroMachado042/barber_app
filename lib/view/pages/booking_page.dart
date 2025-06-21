@@ -25,7 +25,7 @@ class _BookingPageState extends State<BookingPage> {
   int passedHorarios = 0;
   String prof = 'adm@gmail.com';
   Map<String, dynamic> diasDeTrabalho = {};
-  bool diaDeFolga = false;
+  bool isBreakDay = false;
 
   final servicesBox = Hive.box('servicesBox');
   @override
@@ -134,10 +134,14 @@ class _BookingPageState extends State<BookingPage> {
                           child: InkWell(
                             onTap: () async {
                               selectedDay = index;
+                              String formatedDate =
+                                  '${DateTime.now().add(Duration(days: index)).day.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).month.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).year.toString().padLeft(2, '0')}';
                               await FirestoreService().loadHorarios(
                                 prof,
-                                '${DateTime.now().add(Duration(days: index)).day.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).month.toString().padLeft(2, '0')}-${DateTime.now().add(Duration(days: index)).year.toString().padLeft(2, '0')}',
+                                formatedDate,
                               );
+                              isBreakDay = await FirestoreService()
+                                  .checkBreakDay(formatedDate, prof);
                               setState(() {
                                 hasDay = true;
                                 selectedHour = null;
@@ -192,11 +196,16 @@ class _BookingPageState extends State<BookingPage> {
                           selectedDay,
                         );
                         horariosLenght -= passedHorarios;
-                        return horariosLenght == 0 ||
-                                !diasDeTrabalho['${DummyData.weekdays[DateTime.now().add(Duration(days: selectedDay!)).weekday - 1]}']
+                        print('ISBREACKDAY = $isBreakDay');
+                        return !diasDeTrabalho['${DummyData.weekdays[DateTime.now().add(Duration(days: selectedDay!)).weekday - 1]}'] ||
+                                isBreakDay ||
+                                horariosLenght == 0
                             ? Center(
                               child: Text(
-                                'Não há mais horários para hoje!',
+                                isBreakDay ||
+                                        !diasDeTrabalho['${DummyData.weekdays[DateTime.now().add(Duration(days: selectedDay!)).weekday - 1]}']
+                                    ? 'Não estou atendendo neste dia.'
+                                    : 'Não há mais horários para hoje!',
                                 style: TextStyle(fontSize: 18),
                               ),
                             )
