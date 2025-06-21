@@ -39,16 +39,50 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: Text('Nome'),
                     ),
-                    TextField(controller: usernameController),
+                    TextField(
+                      controller: usernameController,
+                      cursorColor: Colors.white,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.amber,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 20),
                   ],
                 )
                 : Column(),
             SizedBox(width: double.infinity, child: Text('E-mail')),
-            TextField(controller: emailController),
+            TextField(
+              controller: emailController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.amber,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
             SizedBox(height: 20),
             SizedBox(width: double.infinity, child: Text('Senha')),
-            TextField(controller: passwordController, obscureText: true,),
+            TextField(
+              controller: passwordController,
+              cursorColor: Colors.white70,
+              decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.amber,
+                    width: 2,
+                  ),
+                ),
+              ),
+              obscureText: true,
+            ),
             SizedBox(height: 60),
             SizedBox(
               width: double.infinity,

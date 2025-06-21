@@ -277,7 +277,9 @@ class _CalendarPageState extends State<CalendarPage> {
                                             BorderRadius.circular(5),
                                       ),
                                       child: Stack(
-                                        children: [
+                                        children: [ 
+                                          //bolinha no dia de hoje
+                                          /*
                                           if (date.day ==
                                                   DateTime.now()
                                                       .day &&
@@ -303,7 +305,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                 height: 10,
                                                 width: 10,
                                               ),
-                                            ),
+                                            ),*/
                                           Center(
                                             child: Text(
                                               '${date.day}',

@@ -622,15 +622,18 @@ class FirestoreService {
       current = current.add(Duration(minutes: 30));
     }
     //subtrair os horarios de intervalo um por um
-    current = parseTime(horas[2]);
-    last = parseTime(horas[3]);
-    while (current != last) {
-      intervals.add(
-        '${current.hour.toString().padLeft(2, '0')}:${current.minute.toString().padLeft(2, '0')}',
-      );
-      current = current.add(Duration(minutes: 30));
+    print(horas[2]);
+    if (horas[2] != '') {
+      current = parseTime(horas[2]);
+      last = parseTime(horas[3]);
+      while (current != last) {
+        intervals.add(
+          '${current.hour.toString().padLeft(2, '0')}:${current.minute.toString().padLeft(2, '0')}',
+        );
+        current = current.add(Duration(minutes: 30));
+      }
+      times = (times.toSet().difference(intervals.toSet())).toList();
     }
-    times = (times.toSet().difference(intervals.toSet())).toList();
     print(times);
     print(times.length);
     FirestoreService().changeHorarios(user!.email!, times);
