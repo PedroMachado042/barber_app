@@ -266,18 +266,34 @@ class _CalendarPageState extends State<CalendarPage> {
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                         color:
-                                            color ??
-                                            const Color.fromARGB(
-                                              255,
-                                              197,
-                                              198,
-                                              202,
-                                            ),
+                                            date.isBefore(
+                                                  DateTime.now()
+                                                      .subtract(
+                                                        Duration(
+                                                          days: 1,
+                                                        ),
+                                                      ),
+                                                )
+                                                ? color ??
+                                                    color ?? //cor dos dias passados
+                                                    const Color.fromARGB(
+                                                      255,
+                                                      197,
+                                                      198,
+                                                      202,
+                                                    )
+                                                : color ?? //cor dos dias por vir
+                                                    const Color.fromARGB(
+                                                      255,
+                                                      197,
+                                                      198,
+                                                      202,
+                                                    ),
                                         borderRadius:
                                             BorderRadius.circular(5),
                                       ),
                                       child: Stack(
-                                        children: [ 
+                                        children: [
                                           //bolinha no dia de hoje
                                           /*
                                           if (date.day ==
