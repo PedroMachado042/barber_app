@@ -1,4 +1,3 @@
-import 'package:barber_app/data/dummy_data.dart';
 import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/pages/SelfDestruct_page.dart';
 import 'package:barber_app/view/pages/launch_page.dart';
