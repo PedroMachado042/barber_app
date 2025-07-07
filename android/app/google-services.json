@@ -12,7 +12,20 @@
           "package_name": "com.example.barber_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "484990867375-jbq43i1d1r1e270420vam0ld2hvk4jjo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.barber_app",
+            "certificate_hash": "ad75ad88cf1fc3634a48bfd35f41ded3efb8992b"
+          }
+        },
+        {
+          "client_id": "484990867375-auidm2h28a27mme00sl8r2sguq9lvpe3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAmPhiVmXqEDMr4OSy6oUxzmGm2-qnVDs"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484990867375-auidm2h28a27mme00sl8r2sguq9lvpe3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "484990867375-qvdp20m4gviu2bgfuoj5gutsmk77inc8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.barberApp"
+              }
+            }
+          ]
         }
       }
     }

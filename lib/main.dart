@@ -1,4 +1,5 @@
 import 'package:barber_app/data/notifiers.dart';
+import 'package:barber_app/firebase_options.dart';
 import 'package:barber_app/view/services/firestore.dart';
 import 'package:barber_app/view/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +15,7 @@ Future<void> checkADM() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
