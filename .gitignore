@@ -45,5 +45,5 @@ app.*.map.json
 /android/app/release
 
 # Chave da Play Store
-key.properties
-app/key.jks
+#key.properties
+#app/key.jks
