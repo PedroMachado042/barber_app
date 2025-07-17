@@ -32,7 +32,7 @@ void main() async {
   servicesLenght.value = servicesBox.length;
   bookingsLenght.value = bookingsBox.length;
   await FirestoreService().loadServices();
-  await checkADM();
+  await checkADM(); 
   runApp(Phoenix(child: const MyApp()));
 }
 
