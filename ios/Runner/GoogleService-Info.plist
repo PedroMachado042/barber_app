@@ -19,7 +19,7 @@
 	<key>PROJECT_ID</key>
 	<string>barber-app-944c8</string>
 	<key>STORAGE_BUCKET</key>
-	<string>barber-app-944c8.firebasestorage.app</string>
+	<string>barber-app-944c8.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
