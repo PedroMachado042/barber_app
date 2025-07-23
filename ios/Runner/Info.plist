@@ -30,7 +30,7 @@
 				<string>com.googleusercontent.apps.484990867375-qvdp20m4gviu2bgfuoj5gutsmk77inc8</string>
 			</array>
 		</dict>
-	<array>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
