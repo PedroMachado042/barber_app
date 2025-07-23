@@ -67,4 +67,5 @@ class DefaultFirebaseOptions {
     iosClientId: '484990867375-qvdp20m4gviu2bgfuoj5gutsmk77inc8.apps.googleusercontent.com',
     iosBundleId: 'com.example.barberApp',
   );
+
 }
