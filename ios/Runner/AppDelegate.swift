@@ -1,6 +1,6 @@
 import UIKit
 import Flutter
-import Firebase // <-- Adicione isso
+import FirebaseCore // <-- Adicione isso
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -11,13 +11,5 @@ import Firebase // <-- Adicione isso
     FirebaseApp.configure() // <-- Inicialização do Firebase
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
-
-  override func application(
-    _ app: UIApplication,
-    open url: URL,
-    options: [UIApplication.OpenURLOptionsKey : Any] = [:]
-  ) -> Bool {
-    return super.application(app, open: url, options: options)
   }
 }
