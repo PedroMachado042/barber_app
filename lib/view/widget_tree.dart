@@ -25,7 +25,8 @@ class _WidgetTreeState extends State<WidgetTree> {
     checkSelfDestruct();
     if (user != null) {
       isLogged.value = true;
-      if (isADM == false) {
+      if(isADM==false)
+      {
         FirestoreService().getAppointments();
       }
     }
@@ -50,12 +51,18 @@ class _WidgetTreeState extends State<WidgetTree> {
           return !isLogged ? LaunchPage() : MenuPage();
         },
       ),
-
+      /*
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.black,
-        onPressed: () => throw Exception(),
-        child: const Text("CUZINHO",style: TextStyle(color: Colors.tealAccent, fontSize: 12),),
-      ),
+        onPressed: () async {
+          //print(user);
+          //print(isLogged);
+          //print(horariosBox.values);
+          //print(bookingsBox.values);
+          //print(servicesBox.values);
+          
+        },
+      ),*/
     );
   }
 }
