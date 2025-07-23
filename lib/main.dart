@@ -3,7 +3,6 @@ import 'package:barber_app/firebase_options.dart';
 import 'package:barber_app/view/services/firestore.dart';
 import 'package:barber_app/view/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -17,7 +16,6 @@ Future<void> checkADM() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

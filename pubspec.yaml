@@ -47,7 +47,6 @@ dependencies:
   simple_heatmap_calendar: ^0.4.0
   flutter_launcher_icons: ^0.14.3
   fl_chart: ^1.0.0
-  firebase_crashlytics: ^4.3.10
   firebase_analytics: ^11.6.0
 
 dev_dependencies:
