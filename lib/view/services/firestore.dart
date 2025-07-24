@@ -430,14 +430,14 @@ class FirestoreService {
     for (final appointmentDoc in appointmentsSnapshot.docs) {
       final data = appointmentDoc.data();
       if (DateTime.parse(data['time']).isBefore(DateTime.now())) {
-        //botar aqui dentro quando parar de testar
-      }
-      users.add({
+        //botar aqui dentro quando parar de testar !!!!!!!!
+              users.add({
         'client': data['client'],
         'name': data['name'],
         'time': data['time'],
         'price': data['price'],
       });
+      }
     }
     return users;
   }
