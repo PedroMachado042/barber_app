@@ -17,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.peti.barber_app"
+    namespace = "com.peti.barberApp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 

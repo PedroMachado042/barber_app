@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDAmPhiVmXqEDMr4OSy6oUxzmGm2-qnVDs',
-    appId: '1:484990867375:android:c4dffaaf162e9a655ac15a',
+    appId: '1:484990867375:android:0ac3ba33b5a5489e5ac15a',
     messagingSenderId: '484990867375',
     projectId: 'barber-app-944c8',
     storageBucket: 'barber-app-944c8.firebasestorage.app',
@@ -59,13 +59,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCBiltFIcaAXuvkWk5REikynt-Myp6FAhE',
-    appId: '1:484990867375:ios:9976e47fa808b4d05ac15a',
+    appId: '1:484990867375:ios:243c4bc85dfe47045ac15a',
     messagingSenderId: '484990867375',
     projectId: 'barber-app-944c8',
     storageBucket: 'barber-app-944c8.firebasestorage.app',
     androidClientId: '484990867375-jbq43i1d1r1e270420vam0ld2hvk4jjo.apps.googleusercontent.com',
-    iosClientId: '484990867375-qvdp20m4gviu2bgfuoj5gutsmk77inc8.apps.googleusercontent.com',
-    iosBundleId: 'com.example.barberApp',
+    iosClientId: '484990867375-b466163t6limn03k7mbvv52sn3c1m2qf.apps.googleusercontent.com',
+    iosBundleId: 'com.peti.barberApp',
   );
 
 }

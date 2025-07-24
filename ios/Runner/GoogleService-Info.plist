@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>484990867375-qvdp20m4gviu2bgfuoj5gutsmk77inc8.apps.googleusercontent.com</string>
+	<string>484990867375-b466163t6limn03k7mbvv52sn3c1m2qf.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.484990867375-qvdp20m4gviu2bgfuoj5gutsmk77inc8</string>
+	<string>com.googleusercontent.apps.484990867375-b466163t6limn03k7mbvv52sn3c1m2qf</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>484990867375-jbq43i1d1r1e270420vam0ld2hvk4jjo.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.barberApp</string>
+	<string>com.peti.barberApp</string>
 	<key>PROJECT_ID</key>
 	<string>barber-app-944c8</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:484990867375:ios:9976e47fa808b4d05ac15a</string>
+	<string>1:484990867375:ios:243c4bc85dfe47045ac15a</string>
 </dict>
 </plist>
