@@ -39,13 +39,13 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'weak-password') {
-        message = 'The password provided is too weak';
+        message = 'Digite uma senha mais forte';
       } else if (e.code == 'email-already-in-use') {
-        message = 'An account already exists with that email.';
+        message = 'Ja existe uma conta com este e-mail';
       } else if (e.code == 'invalid-email') {
-        message = 'The email address is not valid.';
+        message = 'Email inválido!';
       } else if (e.code == 'channel-error') {
-        message = 'Please fill both fields';
+        message = 'Por favor, preencha todos os campos';
       }
       print(e.code);
       Fluttertoast.showToast(
@@ -78,12 +78,14 @@ class AuthService {
       await FirestoreService().getAppointments();
     } on FirebaseAuthException catch (e) {
       String message = '';
-      if (e.code == 'user-not-found' || e.code == 'invalid-email') {
-        message = 'No user found for that email';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password!';
+      if (e.code == 'invalid-email') {
+        message = 'Email inválido!';
+      }else if (e.code == 'user-not-found') {
+        message = 'Nenhum usuário encontrado com este e-mail';
+      }else if (e.code == 'invalid-credential') {
+        message = 'Nenhuma conta encontrada com estes dados!';
       } else if (e.code == 'channel-error') {
-        message = 'Please fill both fields';
+        message = 'Por favor, preencha todos os campos';
       }
       print(e.code);
       Fluttertoast.showToast(
@@ -96,12 +98,40 @@ class AuthService {
   //--------------------------------------------------------------------------
 
   Future<void> signout(bool delete, context) async {
-    delete
-        ? [
-          await FirestoreService().deleteCollection(),
-          await FirebaseAuth.instance.currentUser!.delete(),
-        ]
-        : await FirebaseAuth.instance.signOut();
+    final User? user = FirebaseAuth.instance.currentUser;
+    String providerId = '';
+    for (final userInfo in user!.providerData) {
+      providerId = userInfo.providerId;
+      print('Provider ID: ${userInfo.providerId}');
+    }
+    //logar com o google para deletar
+    if (providerId == 'google.com') {
+      final gUser = await _googleSignIn.signIn();
+      if (gUser == null) return;
+
+      final gAuth = await gUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken,
+        idToken: gAuth.idToken,
+      );
+      await firebaseAuth.signInWithCredential(credential);
+    }
+    if (delete) {
+      try {
+        await FirestoreService().deleteCollection();
+        await FirebaseAuth.instance.currentUser!.delete();
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'requires-recent-login') {
+          Fluttertoast.showToast(
+            msg: 'Por favor, faça login novamente e delete a conta para finalizar a operação.',
+            backgroundColor: Colors.black87,
+          );
+          return;
+        }
+      }
+    } else
+      await FirebaseAuth.instance.signOut();
     isLogged.value = false;
     bookingsLenght.value = 0;
     bookingsBox.clear();
@@ -133,8 +163,7 @@ class AuthService {
 
     final gUser = await _googleSignIn.signIn();
     if (gUser == null) return;
-    final gAuth =
-        await gUser.authentication;
+    final gAuth = await gUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
       accessToken: gAuth.accessToken,

@@ -8,6 +8,7 @@ import 'package:barber_app/view/pages/booking_page.dart';
 import 'package:barber_app/view/pages/localization_page.dart';
 import 'package:barber_app/view/pages/services_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 List<Widget> pages = [
   BookingPage(),
@@ -35,13 +36,15 @@ class MenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: isADM,
-      builder: (Bcontext, isLogged, child) {
-        return IconButton(
-          padding: EdgeInsets.symmetric(vertical: 16),
-          onPressed: () {
-            Navigator.push(
+    return IconButton(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      onPressed: () {
+        (!isLogged.value && (id == 0 || id == 1))
+            ? Fluttertoast.showToast(
+              msg: 'Entre em uma conta para usar essas funções!',
+              backgroundColor: Colors.black87,
+            )
+            : Navigator.push(
               context,
               MaterialPageRoute(
                 builder:
@@ -51,34 +54,32 @@ class MenuButton extends StatelessWidget {
                             : pages.elementAt(id),
               ),
             );
-          },
-          icon: Column(
-            children: [
-              Icon(icon),
-              SizedBox(height: 8),
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: isADM.value ? Colors.black : Colors.white,
-                ),
-              ),
-            ],
-          ),
-          iconSize: 40,
-          color: isADM.value ? Colors.black : Colors.white,
-          style: IconButton.styleFrom(
-            backgroundColor:
-                isADM.value
-                    ? const Color.fromARGB(255, 221, 148, 38)
-                    : Colors.black,
-            fixedSize: Size(140, 110),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+      },
+      icon: Column(
+        children: [
+          Icon(icon),
+          SizedBox(height: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 20,
+              color: isADM.value ? Colors.black : Colors.white,
             ),
           ),
-        );
-      },
+        ],
+      ),
+      iconSize: 40,
+      color: isADM.value ? Colors.black : Colors.white,
+      style: IconButton.styleFrom(
+        backgroundColor:
+            isADM.value
+                ? const Color.fromARGB(255, 221, 148, 38)
+                : Colors.black,
+        fixedSize: Size(140, 110),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:barber_app/view/pages/login_page.dart';
+import 'package:barber_app/view/pages/menu_page.dart';
 import 'package:barber_app/view/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class LaunchPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 20,
+            spacing: 0,
             children: [
               ElevatedButton(
                 onPressed: () {
@@ -28,7 +29,7 @@ class LaunchPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(55),
+                  minimumSize: Size.fromHeight(50),
                   backgroundColor: const Color.fromARGB(
                     255,
                     143,
@@ -41,6 +42,7 @@ class LaunchPage extends StatelessWidget {
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -52,7 +54,7 @@ class LaunchPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(55),
+                  minimumSize: Size.fromHeight(50),
                   backgroundColor: Colors.black54,
                 ),
                 child: Text(
@@ -60,16 +62,55 @@ class LaunchPage extends StatelessWidget {
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ),
+              SizedBox(height: 15),
               Divider(color: Colors.black87, thickness: 3),
-              IconButton(
+              SizedBox(height: 5,),
+              TextButton(
                 onPressed: () {
-                  AuthService().signInWithGoogle(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => MenuPage(),
+                    ),
+                  );
                 },
-                icon: Image.asset(
-                  'assets/images/google_logo.png',
-                  height: 25,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size.fromHeight(30),
+                  backgroundColor: const Color.fromARGB(40, 0, 0, 0),
+                ),
+                child: Text(
+                  'Entrar sem uma conta',
+                  style: TextStyle(fontSize: 15, color: Colors.white60),
                 ),
               ),
+              SizedBox(height: 10),
+              /*
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      AuthService().signInWithGoogle(context);
+                    },
+                    icon: Image.asset(
+                      'assets/images/google_logo.png',
+                      height: 25,
+                    ),
+                  ),
+                  SizedBox(width: 15,),
+                  IconButton(
+                    onPressed: () {
+                      AuthService().signInWithGoogle(context);
+                    },
+                    icon: Image.asset(
+                      'assets/images/apple_logo.png',
+                      height: 25,
+                    ),
+                  ),
+                ],
+              ),
+              */
             ],
           ),
         ),
