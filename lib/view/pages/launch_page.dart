@@ -85,7 +85,7 @@ class LaunchPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              /*
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -98,6 +98,7 @@ class LaunchPage extends StatelessWidget {
                       height: 25,
                     ),
                   ),
+                  /*
                   SizedBox(width: 15,),
                   IconButton(
                     onPressed: () {
@@ -108,9 +109,10 @@ class LaunchPage extends StatelessWidget {
                       height: 25,
                     ),
                   ),
+                  */
                 ],
               ),
-              */
+              
             ],
           ),
         ),

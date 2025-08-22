@@ -2,6 +2,7 @@ import 'package:barber_app/data/notifiers.dart';
 import 'package:barber_app/view/pages/SelfDestruct_page.dart';
 import 'package:barber_app/view/pages/launch_page.dart';
 import 'package:barber_app/view/pages/menu_page.dart';
+import 'package:barber_app/view/services/dev_tools.dart';
 import 'package:barber_app/view/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,7 @@ class _WidgetTreeState extends State<WidgetTree> {
     checkSelfDestruct();
     if (user != null) {
       isLogged.value = true;
-      if(isADM==false)
-      {
+      if (isADM == false) {
         FirestoreService().getAppointments();
       }
     }
@@ -55,12 +55,12 @@ class _WidgetTreeState extends State<WidgetTree> {
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.black,
         onPressed: () async {
+          DevTools().ReloadAllProfessionalAppointments("adm@gmail.com");
           //print(user);
           //print(isLogged);
           //print(horariosBox.values);
           //print(bookingsBox.values);
           //print(servicesBox.values);
-          
         },
       ),*/
     );

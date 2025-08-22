@@ -139,6 +139,7 @@ class FirestoreService {
         .set({
           'icon': servicesBox.get(serviceNum)[0],
           'name': servicesBox.get(serviceNum)[1],
+          'price': servicesBox.get(serviceNum)[2],
           'time': time,
           'prof': prof,
           'timestamp': Timestamp.now(),
@@ -288,6 +289,8 @@ class FirestoreService {
     // Essa é a função mais longa de todos os tempos, em parte eu me orgulho pois ela funciona, porém reconheço sua ineficiência, deixo ela aqui como uma forma de expressão artística que retrata a rebeldia em decorrência do sofrimento do programador.
     DateTime time = bookingsBox.get(id)[2];
     String prof = bookingsBox.get(id)[4];
+
+    //cancelar na parte do cliente
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance
             .collection('Clients')
@@ -322,6 +325,8 @@ class FirestoreService {
       }
       i++;
     }
+
+    //cancelar na parte do profissional
     QuerySnapshot snapshot2 =
         await FirebaseFirestore.instance
             .collection('Professionals')
