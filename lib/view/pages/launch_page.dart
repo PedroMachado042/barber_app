@@ -89,6 +89,7 @@ class LaunchPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  /*
                   IconButton(
                     onPressed: () {
                       AuthService().signInWithGoogle(context);
@@ -98,7 +99,7 @@ class LaunchPage extends StatelessWidget {
                       height: 25,
                     ),
                   ),
-                  /*
+                  
                   SizedBox(width: 15,),
                   IconButton(
                     onPressed: () {
